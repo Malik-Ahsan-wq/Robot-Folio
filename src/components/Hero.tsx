@@ -219,13 +219,31 @@ export default function Hero() {
             </span>
           </div>
 
-          <h1
-            ref={nameRef}
-            className="font-display text-5xl font-bold leading-tight tracking-tight text-text-primary sm:text-6xl lg:text-7xl xl:text-8xl"
-            aria-label="AHSAN BASHIR"
-          >
-            AHSAN <span className="text-neon-cyan">BASHIR</span>
-          </h1>
+        
+           <h1
+  ref={nameRef}
+  className="font-display text-5xl font-extrabold tracking-tighter text-white sm:text-7xl xl:text-8xl"
+>
+  AHSAN{" "}
+  <span className="relative inline-block px-2">
+    {/* The Glowing Text Surface */}
+    {/* <span className="relative z-10 bg-gradient-to-b from-white via-neon-cyan to-[#008291] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+      BASHIR
+    </span> */}
+
+    {/* The "Backlight" Glow - creating the atmospheric depth */}
+    <span 
+      className="absolute inset-0 z-0 blur-2xl opacity-40 bg-neon-cyan mix-blend-screen"
+      aria-hidden="true"
+    >
+      BASHIR
+    </span>
+
+    {/* The Underline Highlight */}
+    <span className="absolute -bottom-2 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-transparent via-neon-cyan to-transparent opacity-50 shadow-[0_0_20px_#00f0ff]" />
+  </span>
+</h1>
+         
 
           <p
             ref={subtitleRef}
@@ -241,21 +259,21 @@ export default function Hero() {
             REACT.js · NEXT.js · NODE.js · EXPRESS.js · MONGODB · SUPABASE SQL
           </p>
 
-          <button
-            ref={ctaRef}
-            onClick={() =>
-              document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="group mt-4 flex items-center gap-3 rounded border border-neon-cyan/30 bg-neon-cyan/5
-              px-6 py-3 font-display text-xs tracking-[0.2em] text-neon-cyan opacity-0
-              transition-all duration-300 hover:border-neon-cyan/60 hover:bg-neon-cyan/10
-              hover:shadow-[0_0_30px_rgba(0,240,255,0.15)]"
-          >
-            VIEW PROJECTS
-            <span className="transition-transform duration-300 group-hover:translate-x-1">
-              →
-            </span>
-          </button>
+         <a
+  href="/Ahsan-resume-black-theme.pdf"
+  download
+  target="_blank"
+  rel="noopener noreferrer"
+  className="group mt-4 flex items-center gap-3 rounded border border-neon-cyan/30 bg-neon-cyan/5
+             px-6 py-3 font-display text-xs tracking-[0.2em] text-neon-cyan 
+             transition-all duration-300 hover:border-neon-cyan/60 hover:bg-neon-cyan/10
+             hover:shadow-[0_0_30px_rgba(0,240,255,0.15)]"
+>
+  Download Resume
+  <span className="transition-transform duration-300 group-hover:translate-x-1">
+    →
+  </span>
+</a>
         </div>
 
         {/* Right: Robotic Arm */}

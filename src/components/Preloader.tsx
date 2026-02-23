@@ -34,6 +34,7 @@ const BOOT_LINES = [
   "> Establishing comm link ... 2.4GHz",
   "> Safety systems ... ARMED",
   "> ALL SYSTEMS NOMINAL",
+  "> Its only for Ahsan Bashir's Portfolio, but it looks so cool!"
 ];
 
 export default function Preloader({ onComplete }: PreloaderProps) {
@@ -218,7 +219,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-cyber-bg"
+      className="fixed mt-20 md:mt-0 inset-0 z-[100] flex flex-col items-center justify-center bg-cyber-bg"
       role="status"
       aria-label="Loading application"
       aria-live="polite"

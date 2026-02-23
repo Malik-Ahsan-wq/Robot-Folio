@@ -231,112 +231,112 @@ export default function Timeline() {
   );
 
   return (
-    <section
-      ref={sectionRef}
-      id="timeline"
-      className="relative min-h-screen overflow-hidden bg-cyber-bg py-32"
-      aria-label="Timeline section"
-    >
-      <div className="grid-bg absolute inset-0 opacity-20" />
-      <div className="absolute left-0 top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-neon-green/20 to-transparent" />
+<section
+  ref={sectionRef}
+  id="timeline"
+  className="relative min-h-screen overflow-hidden bg-cyber-bg py-20 md:py-32"
+  aria-label="Timeline section"
+>
+  <div className="grid-bg absolute inset-0 opacity-20" />
+  <div className="absolute left-0 top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-neon-green/20 to-transparent" />
 
-      <div className="relative z-10 mx-auto max-w-5xl px-6">
-        {/* ── Section Header ── */}
-        <div className="section-heading mb-20 text-center opacity-0">
-          <div className="mb-4 flex items-center justify-center gap-4">
-            <span className="h-[2px] w-12 bg-neon-green" />
-            <span className="font-mono text-xs tracking-[0.3em] text-neon-green">
-              04 — TRAJECTORY
-            </span>
-            <span className="h-[2px] w-12 bg-neon-green" />
-          </div>
-          <h2 className="font-display text-4xl font-bold text-text-primary sm:text-5xl">
-            ASSEMBLY <span className="text-neon-green" style={{ textShadow: "0 0 10px rgba(0,255,136,0.4)" }}>LOG</span>
-          </h2>
-        </div>
-
-        {/* ── Timeline ── */}
-        <div className="relative">
-          {/* Central track line */}
-          <div className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2">
-            <div
-              ref={trackLineRef}
-              className="h-full w-full bg-gradient-to-b from-neon-cyan/60 via-neon-magenta/40 to-neon-green/60"
-            />
-          </div>
-
-          {/* Entries */}
-          <div className="flex flex-col gap-16">
-            {MILESTONES.map((milestone, i) => {
-              const isLeft = i % 2 === 0;
-
-              return (
-                <div
-                  key={milestone.year + milestone.title}
-                  className={`timeline-entry relative flex items-center gap-8 ${
-                    isLeft ? "flex-row" : "flex-row-reverse"
-                  }`}
-                >
-                  {/* Card */}
-                  <div
-                    className={`timeline-card flex-1 rounded-lg border border-metal-dark/40 bg-cyber-panel/50 p-6 opacity-0 backdrop-blur-sm ${
-                      isLeft ? "text-right" : "text-left"
-                    }`}
-                    style={{ borderColor: milestone.accentColor + "25" }}
-                  >
-                    <div className={`mb-3 flex items-center gap-2 ${isLeft ? "justify-end" : "justify-start"}`}>
-                      <span
-                        className="rounded px-2 py-0.5 font-mono text-[9px] tracking-wider"
-                        style={{
-                          backgroundColor: milestone.accentColor + "15",
-                          color: milestone.accentColor,
-                        }}
-                      >
-                        {TYPE_ICONS[milestone.type]} {milestone.type.toUpperCase()}
-                      </span>
-                    </div>
-                    <h3
-                      className="mb-2 font-display text-sm font-bold tracking-wide"
-                      style={{ color: milestone.accentColor }}
-                    >
-                      {milestone.title}
-                    </h3>
-                    <p className="font-body text-sm leading-relaxed text-text-secondary">
-                      {milestone.description}
-                    </p>
-                  </div>
-
-                  {/* Year Node (centered on track) */}
-                  <div className="relative z-10 flex flex-col items-center">
-                    {/* Pulse ring */}
-                    <div
-                      className="pulse-ring absolute h-10 w-10 rounded-full opacity-0"
-                      style={{ border: `1px solid ${milestone.accentColor}` }}
-                    />
-                    <div
-                      className="year-node flex h-10 w-10 items-center justify-center rounded-full border-2 bg-cyber-bg opacity-0"
-                      style={{
-                        borderColor: milestone.accentColor,
-                        boxShadow: `0 0 15px ${milestone.accentColor}40`,
-                      }}
-                    >
-                      <span
-                        className="font-mono text-[9px] font-bold"
-                        style={{ color: milestone.accentColor }}
-                      >
-                        {milestone.year.slice(-2)}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Spacer for opposite side */}
-                  <div className="flex-1" />
-                </div>
-              );
-            })}
-          </div>
-        </div>
+  <div className="relative z-10 mx-auto max-w-5xl px-6">
+    {/* ── Section Header ── */}
+    <div className="section-heading mb-16 md:mb-20 text-center opacity-0">
+      <div className="mb-4 flex items-center justify-center gap-4">
+        <span className="h-[2px] w-8 md:w-12 bg-neon-green" />
+        <span className="font-mono text-[10px] md:text-xs tracking-[0.3em] text-neon-green">
+          04 — TRAJECTORY
+        </span>
+        <span className="h-[2px] w-8 md:w-12 bg-neon-green" />
       </div>
-    </section>
+      <h2 className="font-display text-3xl font-bold text-text-primary sm:text-5xl">
+        ASSEMBLY <span className="text-neon-green" style={{ textShadow: "0 0 10px rgba(0,255,136,0.4)" }}>LOG</span>
+      </h2>
+    </div>
+
+    {/* ── Timeline Container ── */}
+    <div className="relative">
+      {/* Central track line: Left-aligned on mobile, Center-aligned on desktop */}
+      <div className="absolute left-4 md:left-1/2 top-0 h-full w-[2px] -translate-x-1/2">
+        <div
+          ref={trackLineRef}
+          className="h-full w-full bg-gradient-to-b from-neon-cyan/60 via-neon-magenta/40 to-neon-green/60"
+        />
+      </div>
+
+      {/* Entries */}
+      <div className="flex flex-col gap-12 md:gap-16">
+        {MILESTONES.map((milestone, i) => {
+          const isLeft = i % 2 === 0;
+
+          return (
+            <div
+              key={milestone.year + milestone.title}
+              className={`timeline-entry relative flex items-start md:items-center gap-6 md:gap-8 ${
+                isLeft ? "md:flex-row" : "md:flex-row-reverse"
+              } flex-row`} // Forced flex-row on mobile
+            >
+              
+              {/* Year Node (Sticky/Fixed position on the track) */}
+              <div className="relative z-10 flex flex-shrink-0 flex-col items-center">
+                <div
+                  className="pulse-ring absolute h-8 w-8 md:h-10 md:w-10 rounded-full opacity-0"
+                  style={{ border: `1px solid ${milestone.accentColor}` }}
+                />
+                <div
+                  className="year-node flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border-2 bg-cyber-bg opacity-0"
+                  style={{
+                    borderColor: milestone.accentColor,
+                    boxShadow: `0 0 15px ${milestone.accentColor}40`,
+                  }}
+                >
+                  <span
+                    className="font-mono text-[8px] md:text-[9px] font-bold"
+                    style={{ color: milestone.accentColor }}
+                  >
+                    {milestone.year.slice(-2)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Card */}
+              <div
+                className={`timeline-card flex-1 rounded-lg border border-metal-dark/40 bg-cyber-panel/50 p-5 md:p-6 opacity-0 backdrop-blur-sm ${
+                  isLeft ? "md:text-right" : "md:text-left"
+                } text-left`} // Forced left-align on mobile
+                style={{ borderColor: milestone.accentColor + "25" }}
+              >
+                <div className={`mb-2 flex items-center gap-2 ${isLeft ? "md:justify-end" : "md:justify-start"} justify-start`}>
+                  <span
+                    className="rounded px-2 py-0.5 font-mono text-[8px] md:text-[9px] tracking-wider"
+                    style={{
+                      backgroundColor: milestone.accentColor + "15",
+                      color: milestone.accentColor,
+                    }}
+                  >
+                    {TYPE_ICONS[milestone.type]} {milestone.type.toUpperCase()}
+                  </span>
+                </div>
+                <h3
+                  className="mb-1 md:mb-2 font-display text-sm font-bold tracking-wide"
+                  style={{ color: milestone.accentColor }}
+                >
+                  {milestone.title}
+                </h3>
+                <p className="font-body text-xs md:text-sm leading-relaxed text-text-secondary">
+                  {milestone.description}
+                </p>
+              </div>
+
+              {/* Spacer for opposite side (Hidden on mobile) */}
+              <div className="hidden md:block md:flex-1" />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
   );
 }
