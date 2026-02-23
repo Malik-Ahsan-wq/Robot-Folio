@@ -215,31 +215,30 @@ export default function Hero() {
           <div className="mb-2 flex items-center gap-3">
             <span className="h-[2px] w-8 bg-neon-cyan" />
             <span className="font-mono text-xs tracking-[0.3em] text-neon-cyan">
-              ROBOTICS ENGINEER
+             MERN + NEXT.js DEVELOPER
             </span>
           </div>
 
           <h1
             ref={nameRef}
             className="font-display text-5xl font-bold leading-tight tracking-tight text-text-primary sm:text-6xl lg:text-7xl xl:text-8xl"
-            aria-label="ATTARI"
+            aria-label="AHSAN BASHIR"
           >
-            ATTARI
+            AHSAN <span className="text-neon-cyan">BASHIR</span>
           </h1>
 
           <p
             ref={subtitleRef}
             className="max-w-xl font-body text-lg leading-relaxed text-text-secondary opacity-0 sm:text-xl"
           >
-            Designing & building <span className="text-neon-cyan">cyber-physical systems</span> that bridge
-            the gap between digital intelligence and mechanical precision.
+            MERN + NEXT.js Developer skilled in building <span className="text-neon-cyan">dynamic, responsive, and scalable</span> web applications using MongoDB, Supabase SQL, Express.js, React.js, and Node.js.
           </p>
 
           <p
             ref={taglineRef}
             className="font-mono text-xs tracking-widest text-text-muted opacity-0"
           >
-            MECHATRONICS · CONTROL SYSTEMS · EMBEDDED AI · VISION
+            REACT.js · NEXT.js · NODE.js · EXPRESS.js · MONGODB · SUPABASE SQL
           </p>
 
           <button

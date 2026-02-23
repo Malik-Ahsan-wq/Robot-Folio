@@ -320,8 +320,10 @@ export default function Contact() {
         <div className="mt-12 flex flex-col items-center gap-4 text-center">
           <div className="flex items-center gap-6">
             {[
-              { label: "EMAIL", value: "hello@attari.dev" },
-              { label: "LOCATION", value: "WORLDWIDE" },
+              { label: "EMAIL", value: "ahsanmalikking57@gmail.com" },
+              { label: "LOCATION", value: "Pakistan, Punjab" },
+              { label: "PHONE", value: "03276227156" },
+              { label: "WEBSITE", value: "www.ahsanmalik.xyz" },
             ].map((info) => (
               <div key={info.label} className="flex flex-col items-center gap-1">
                 <span className="font-mono text-[9px] tracking-wider text-text-muted">
@@ -334,7 +336,7 @@ export default function Contact() {
             ))}
           </div>
           <p className="font-mono text-[10px] text-text-muted">
-            © 2026 ROBO.FOLIO — ALL SYSTEMS OPERATIONAL
+            © 2025 AHSAN BASHIR — MERN + NEXT.js DEVELOPER
           </p>
         </div>
       </div>

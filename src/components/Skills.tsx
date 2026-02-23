@@ -26,18 +26,18 @@ interface Skill {
 }
 
 const SKILLS: Skill[] = [
-  { name: "C / C++", level: 95, category: "LANG", icon: "⟨/⟩", color: "#00f0ff" },
-  { name: "Python", level: 90, category: "LANG", icon: "⟨/⟩", color: "#00f0ff" },
-  { name: "ROS 2", level: 88, category: "FW", icon: "◎", color: "#00ff88" },
-  { name: "Control Theory", level: 92, category: "CORE", icon: "∿", color: "#ff00d4" },
-  { name: "Computer Vision", level: 85, category: "AI", icon: "◉", color: "#ff4d00" },
-  { name: "Deep Learning", level: 82, category: "AI", icon: "◈", color: "#ff4d00" },
-  { name: "FPGA / VHDL", level: 78, category: "HW", icon: "⬢", color: "#00f0ff" },
-  { name: "PCB Design", level: 80, category: "HW", icon: "⬡", color: "#00f0ff" },
-  { name: "Motion Planning", level: 87, category: "CORE", icon: "⤳", color: "#ff00d4" },
-  { name: "Embedded Linux", level: 85, category: "FW", icon: "⊞", color: "#00ff88" },
-  { name: "SLAM / Nav", level: 83, category: "CORE", icon: "◎", color: "#ff00d4" },
-  { name: "CAD / CAM", level: 75, category: "HW", icon: "⬡", color: "#00f0ff" },
+  { name: "React.js", level: 95, category: "LANG", icon: "⟨/⟩", color: "#00f0ff" },
+  { name: "Next.js", level: 92, category: "LANG", icon: "⟨/⟩", color: "#00f0ff" },
+  { name: "Node.js", level: 90, category: "FW", icon: "◎", color: "#00ff88" },
+  { name: "Express.js", level: 88, category: "CORE", icon: "∿", color: "#ff00d4" },
+  { name: "MongoDB", level: 85, category: "DB", icon: "◉", color: "#ff4d00" },
+  { name: "Supabase SQL", level: 82, category: "DB", icon: "◈", color: "#ff4d00" },
+  { name: "JavaScript", level: 93, category: "LANG", icon: "⬢", color: "#00f0ff" },
+  { name: "TypeScript", level: 88, category: "LANG", icon: "⬡", color: "#00f0ff" },
+  { name: "Tailwind CSS", level: 90, category: "CORE", icon: "⤳", color: "#ff00d4" },
+  { name: "Bootstrap", level: 85, category: "FW", icon: "⊞", color: "#00ff88" },
+  { name: "RESTful APIs", level: 87, category: "CORE", icon: "◎", color: "#ff00d4" },
+  { name: "Git/GitHub", level: 88, category: "TOOL", icon: "⬡", color: "#00f0ff" },
 ];
 
 function SkillNode({ skill, index }: { skill: Skill; index: number }) {
@@ -254,10 +254,10 @@ export default function Skills() {
         <div className="mt-12 flex flex-wrap items-center justify-center gap-6">
           {[
             { label: "LANGUAGES", color: "#00f0ff" },
-            { label: "ROBOTICS CORE", color: "#ff00d4" },
-            { label: "HARDWARE", color: "#00f0ff" },
-            { label: "AI / ML", color: "#ff4d00" },
+            { label: "WEB CORE", color: "#ff00d4" },
+            { label: "DATABASES", color: "#ff4d00" },
             { label: "FRAMEWORKS", color: "#00ff88" },
+            { label: "TOOLS", color: "#00f0ff" },
           ].map((cat) => (
             <div key={cat.label} className="flex items-center gap-2">
               <span

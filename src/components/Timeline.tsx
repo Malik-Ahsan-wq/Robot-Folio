@@ -27,66 +27,58 @@ interface Milestone {
 
 const MILESTONES: Milestone[] = [
   {
-    year: "2018",
-    title: "FIRST ROBOT BUILD",
+    year: "2020",
+    title: "ICS WITH COMPUTER DIPLOMA",
     description:
-      "Built an autonomous line-following robot for national competition. First taste of PID control and sensor fusion.",
-    type: "achievement",
-    accentColor: "#00ff88",
-  },
-  {
-    year: "2019",
-    title: "B.Sc. MECHATRONICS",
-    description:
-      "Enrolled in Mechatronics Engineering. Deep dive into dynamics, control systems, and embedded programming.",
+      "Completed ICS with Computer Diploma from Abu Anees College, Faisalabad. Foundation in computer science and programming fundamentals.",
     type: "education",
     accentColor: "#00f0ff",
   },
   {
-    year: "2020",
-    title: "ROBOTICS LAB INTERN",
-    description:
-      "Joined university robotics lab. Developed ROS-based navigation stack for an indoor mobile robot with LiDAR mapping.",
-    type: "work",
-    accentColor: "#ff00d4",
-  },
-  {
     year: "2021",
-    title: "FPGA CONTROLLER PROJECT",
+    title: "MECHANICAL DIPLOMA",
     description:
-      "Designed a real-time motor controller on FPGA achieving 10kHz control loop. Published findings at IEEE conference.",
-    type: "achievement",
-    accentColor: "#ff4d00",
+      "Completed Mechanical Diploma from VTI College. Gained technical knowledge and problem-solving skills in mechanical systems.",
+    type: "education",
+    accentColor: "#00f0ff",
   },
   {
-    year: "2022",
-    title: "ROBOTICS ENGINEER",
+    year: "2023",
+    title: "FRONT END DEVELOPER - WEBSOLAVE",
     description:
-      "Joined an industrial automation company. Worked on delta robots, conveyor systems, and vision-guided pick-and-place.",
+      "Joined Websolave IT Company as Front End Developer. Developed and maintained full-stack web applications using MERN stack. Built RESTful APIs and implemented secure authentication systems.",
     type: "work",
     accentColor: "#ff00d4",
   },
   {
     year: "2023",
-    title: "SWARM ROBOTICS LEAD",
+    title: "RESPONSIVE WEB DESIGN",
     description:
-      "Led development of multi-agent drone swarm with decentralized coordination. Deployed fleet of 12 autonomous UAVs.",
+      "Designed many responsive websites with Next.js and React.js technologies. Collaborated with UI/UX designers using TailwindCSS and Bootstrap for clean, user-friendly interfaces.",
+    type: "achievement",
+    accentColor: "#ff4d00",
+  },
+  {
+    year: "2024",
+    title: "FRONT END DEVELOPER - ESCASA",
+    description:
+      "Joined ESCASA IT Company as Front End Developer. Contributed to development of social media tools and web applications. Designed and implemented mp4togif.org conversion tool.",
     type: "work",
     accentColor: "#ff00d4",
   },
   {
     year: "2024",
-    title: "M.Sc. COMPLETED",
+    title: "DATABASE OPTIMIZATION",
     description:
-      "Master's in Robotics & AI. Thesis on learned grasp planning for deformable objects using deep reinforcement learning.",
-    type: "education",
-    accentColor: "#00f0ff",
+      "Optimized database queries and schema in MongoDB, reducing response time by 20%. Implemented efficient data structures and indexing strategies for improved performance.",
+    type: "achievement",
+    accentColor: "#00ff88",
   },
   {
     year: "2025",
-    title: "AUTONOMOUS SYSTEMS LEAD",
+    title: "MERN + NEXT.js SPECIALIST",
     description:
-      "Leading development of next-gen autonomous mobile robots with advanced perception and manipulation capabilities.",
+      "Specialized in building dynamic, responsive, and scalable web applications. Strong problem-solving mindset and passion for writing efficient, maintainable code. Deployed applications on Vercel.",
     type: "work",
     accentColor: "#ff00d4",
   },

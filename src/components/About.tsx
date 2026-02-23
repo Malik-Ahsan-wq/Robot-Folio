@@ -19,15 +19,15 @@ gsap.registerPlugin(ScrollTrigger);
 const ABOUT_PARAGRAPHS = [
   {
     title: "ORIGIN SEQUENCE",
-    text: "Started soldering circuits at age 12, built my first autonomous robot at 16. What began as a fascination with making machines move evolved into a deep expertise in cyber-physical systems that perceive, decide, and act.",
+    text: "MERN + NEXT.js Developer skilled in building dynamic, responsive, and scalable web applications. Experienced in creating RESTful APIs, secure authentication, and clean UI with React. Strong problem-solving mindset and passion for writing efficient, maintainable code.",
   },
   {
     title: "CORE DIRECTIVE",
-    text: "I engineer intelligent machines — from low-level embedded firmware and real-time control loops to high-level motion planning and computer vision pipelines. Every system is designed for precision, reliability, and elegance.",
+    text: "Developed and maintained full-stack web applications using MongoDB, Supabase SQL, Express.js, React.js, and Node.js, improving performance and scalability. Built and integrated RESTful APIs for data exchange between frontend and backend.",
   },
   {
     title: "OPERATIONAL PARAMETERS",
-    text: "Fluent in C/C++, Python, ROS2, and hardware-description languages. Experienced with industrial manipulators, mobile robots, FPGA-based control, and deep learning for perception. Always pushing the boundary of what machines can do.",
+    text: "Implemented authentication & authorization (JWT/OAuth) for secure user access. Collaborated with UI/UX designers to create responsive, user-friendly interfaces using React, Redux, and TailwindCSS. Optimized database queries and schema in MongoDB.",
   },
 ];
 

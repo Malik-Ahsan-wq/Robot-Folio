@@ -156,6 +156,9 @@ body {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
 }
+button{
+  cursor: pointer;
+}
 
 /* Plasma loading bar */
 .loading-bar {
