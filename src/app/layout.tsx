@@ -29,6 +29,7 @@ const rajdhani = Rajdhani({
 
 /* ── Metadata ── */
 export const metadata: Metadata = {
+
   title: "AHSAN-BASHIR - Portfolio",
   description:
     "This is my full stack application portfolio showcasing my projects, skills, and experience in robotics and mechatronics. Built with Next.js, React, and GSAP for a dynamic and interactive user experience.",
@@ -41,6 +42,9 @@ export const metadata: Metadata = {
     "embedded systems",
     "control systems",
   ],
+  icons: {
+    icon: "/icon.svg", // <-- ye line add karo
+  },
 };
 
 export default function RootLayout({
