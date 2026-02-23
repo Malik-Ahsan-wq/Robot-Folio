@@ -29,9 +29,9 @@ const rajdhani = Rajdhani({
 
 /* ── Metadata ── */
 export const metadata: Metadata = {
-  title: "ATTARI — Robotics & Mechatronics Portfolio",
+  title: "AHSAN-BASHIR - Portfolio",
   description:
-    "Ultra-advanced robotics, mechatronics, and cyber-physical systems portfolio. Precision-engineered digital experience with cinematic GSAP animations.",
+    "This is my full stack application portfolio showcasing my projects, skills, and experience in robotics and mechatronics. Built with Next.js, React, and GSAP for a dynamic and interactive user experience.",
   keywords: [
     "robotics",
     "mechatronics",

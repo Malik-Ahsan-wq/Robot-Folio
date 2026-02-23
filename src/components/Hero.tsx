@@ -211,7 +211,7 @@ export default function Hero() {
       {/* ── Content ── */}
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-12 px-6 py-20 lg:flex-row lg:gap-20">
         {/* Left: Text content */}
-        <div className="flex flex-1 flex-col items-start gap-6">
+        <div className="flex flex-1 flex-col items-start md:mt-5 gap-6">
           <div className="mb-2 flex items-center gap-3">
             <span className="h-[2px] w-8 bg-neon-cyan" />
             <span className="font-mono text-xs tracking-[0.3em] text-neon-cyan">
@@ -279,8 +279,8 @@ export default function Hero() {
                 const svgEl = armContainerRef.current?.querySelector("svg");
                 if (svgEl) svgRef.current = svgEl;
               }}
-              width={400}
-              height={400}
+              width={500}
+              height={500}
               className="drop-shadow-[0_0_20px_rgba(0,240,255,0.2)]"
             />
           </div>
