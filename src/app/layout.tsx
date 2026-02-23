@@ -37,7 +37,6 @@ export const metadata: Metadata = {
     "robotics",
     "mechatronics",
     "portfolio",
-    "GSAP",
     "cyber-physical systems",
     "embedded systems",
     "control systems",
