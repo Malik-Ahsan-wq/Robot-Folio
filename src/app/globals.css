@@ -1,26 +1,227 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ═══════════════════════════════════════════════════════════════
+   CYBER-INDUSTRIAL ROBOTICS PORTFOLIO — TAILWIND CSS v4 THEME
+   Palette: Deep-space blacks · neon accents · metallic grays
+   ═══════════════════════════════════════════════════════════════ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ── Core Backgrounds ── */
+  --color-cyber-bg: #000408;
+  --color-cyber-panel: #0f111a;
+  --color-cyber-panel-light: #1c2330;
+  --color-cyber-surface: #141820;
+
+  /* ── Neon Accents ── */
+  --color-neon-cyan: #00f0ff;
+  --color-neon-magenta: #ff00d4;
+  --color-neon-orange: #ff4d00;
+  --color-neon-green: #00ff88;
+
+  /* ── Metallic Grays ── */
+  --color-metal-dark: #2a2f3f;
+  --color-metal: #3a4055;
+  --color-metal-light: #4a5568;
+  --color-metal-bright: #718096;
+
+  /* ── Text ── */
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+
+  /* ── Fonts (injected via next/font CSS vars) ── */
+  --font-display: var(--font-orbitron), ui-monospace, monospace;
+  --font-body: var(--font-rajdhani), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Courier New', monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ═══════════════════════════════════════════════════
+   ROOT VARIABLES — glows, speeds, shared tokens
+   ═══════════════════════════════════════════════════ */
+:root {
+  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 60px rgba(0, 240, 255, 0.1);
+  --glow-magenta: 0 0 20px rgba(255, 0, 212, 0.4), 0 0 60px rgba(255, 0, 212, 0.1);
+  --glow-orange: 0 0 20px rgba(255, 77, 0, 0.4), 0 0 60px rgba(255, 77, 0, 0.1);
+  --scanline-speed: 8s;
+}
+
+/* ═══════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════ */
+html {
+  background: #000408;
+  color: #e2e8f0;
+  scroll-behavior: auto; /* Lenis manages smooth scroll */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f111a; }
+::-webkit-scrollbar-thumb { background: #2a2f3f; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00f0ff; }
+
+/* ── Selection ── */
+::selection {
+  background: rgba(0, 240, 255, 0.3);
+  color: #fff;
+}
+
+/* ── Focus Ring — Robotic Glow ── */
+:focus-visible {
+  outline: 2px solid #00f0ff;
+  outline-offset: 2px;
+  box-shadow: var(--glow-cyan);
+}
+
+/* ═══════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════ */
+
+/* Scanline overlay */
+.scanlines { position: relative; }
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 240, 255, 0.03) 2px,
+    rgba(0, 240, 255, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+  animation: scanline-scroll var(--scanline-speed) linear infinite;
+}
+@keyframes scanline-scroll {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(100px); }
+}
+
+/* Grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Neon text glows */
+.text-glow-cyan    { text-shadow: 0 0 10px rgba(0, 240, 255, 0.6), 0 0 40px rgba(0, 240, 255, 0.2); }
+.text-glow-magenta { text-shadow: 0 0 10px rgba(255, 0, 212, 0.6), 0 0 40px rgba(255, 0, 212, 0.2); }
+.text-glow-orange  { text-shadow: 0 0 10px rgba(255, 77, 0, 0.6), 0 0 40px rgba(255, 77, 0, 0.2); }
+
+/* Electromagnetic border glow */
+.border-glow {
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05), var(--glow-cyan);
+}
+
+/* GPU acceleration helpers */
+.gpu {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+.preserve-3d { transform-style: preserve-3d; }
+
+/* ═══════════════════════════════════════════════════
+   TERMINAL / PRELOADER
+   ═══════════════════════════════════════════════════ */
+.preloader-terminal {
+  font-family: ui-monospace, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #00f0ff;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background: #00f0ff;
+  animation: blink 0.8s step-end infinite;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Plasma loading bar */
+.loading-bar {
+  height: 2px;
+  background: linear-gradient(90deg, #00f0ff, #ff00d4, #ff4d00, #00f0ff);
+  background-size: 300% 100%;
+  animation: plasma-flow 2s linear infinite;
+}
+@keyframes plasma-flow {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+/* ═══════════════════════════════════════════════════
+   SPLIT-TEXT HELPERS
+   ═══════════════════════════════════════════════════ */
+.split-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+.split-word {
+  display: inline-block;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════
+   HUD BRACKETS
+   ═══════════════════════════════════════════════════ */
+.hud-bracket { position: relative; }
+.hud-bracket::before,
+.hud-bracket::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: #00f0ff;
+  border-style: solid;
+  opacity: 0.6;
+}
+.hud-bracket::before { top: -4px; left: -4px;  border-width: 2px 0 0 2px; }
+.hud-bracket::after  { bottom: -4px; right: -4px; border-width: 0 2px 2px 0; }
+
+/* Hexagonal clip */
+.hex-clip {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* Iris diaphragm (animated via GSAP clip-path) */
+.iris-clip { clip-path: circle(0% at 50% 50%); }
+
+/* Project card base */
+.project-card {
+  background: linear-gradient(135deg, #0f111a 0%, #1c2330 100%);
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  transition: border-color 0.3s ease;
+}
+.project-card:hover { border-color: rgba(0, 240, 255, 0.4); }
+
+/* ═══════════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .scanlines::after { display: none; }
 }
