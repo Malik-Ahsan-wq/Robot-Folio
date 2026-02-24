@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -880,15 +881,7 @@ const ProjectsPage: React.FC = () => {
         </section>
 
         {/* Footer */}
-        <footer className="projects-footer">
-          <div className="footer-text">
-            Built with Next.js · TypeScript · GSAP · Tailwind CSS
-          </div>
-          <div className="footer-text">
-            Customize with your own projects and styles.
-          </div>
-          <div className="footer-logo">NEXUS_LAB</div>
-        </footer>
+      <Footer/>
       </div>
     </>
   );

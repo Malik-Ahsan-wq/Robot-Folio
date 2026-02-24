@@ -6,7 +6,7 @@ export default function RoboticsContactButton() {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const phoneNumber = "03276227156";
-  const message = "Hello! I'm interested in your robotics / automation services.";
+  const message = "Hello Ahsan! I'm interested in your robotics & automation engineering services.";
 
   const handleClick = () => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -15,26 +15,28 @@ export default function RoboticsContactButton() {
 
   useEffect(() => {
     if (!buttonRef.current) return;
-
-    // Simple hover / active micro-animations (optional enhancement)
     const btn = buttonRef.current;
 
-    const handleMouseEnter = () => {
-      btn.style.transform = 'scale(1.15) rotate(8deg)';
-      btn.style.boxShadow = '0 0 40px rgba(17, 36, 36, 0.7)';
+    const onEnter = () => {
+      btn.style.transform = 'translateY(-4px) scale(1.08)';
+      btn.style.boxShadow = '0 20px 50px -10px rgba(34, 211, 238, 0.5)';
     };
 
-    const handleMouseLeave = () => {
-      btn.style.transform = 'scale(1) rotate(0deg)';
-      btn.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+    const onLeave = () => {
+      btn.style.transform = 'translateY(0) scale(1)';
+      btn.style.boxShadow = '0 10px 30px -5px rgba(0, 0, 0, 0.4)';
     };
 
-    btn.addEventListener('mouseenter', handleMouseEnter);
-    btn.addEventListener('mouseleave', handleMouseLeave);
+    btn.addEventListener('mouseenter', onEnter);
+    btn.addEventListener('mouseleave', onLeave);
+    btn.addEventListener('focus', onEnter);
+    btn.addEventListener('blur', onLeave);
 
     return () => {
-      btn.removeEventListener('mouseenter', handleMouseEnter);
-      btn.removeEventListener('mouseleave', handleMouseLeave);
+      btn.removeEventListener('mouseenter', onEnter);
+      btn.removeEventListener('mouseleave', onLeave);
+      btn.removeEventListener('focus', onEnter);
+      btn.removeEventListener('blur', onLeave);
     };
   }, []);
 
@@ -43,65 +45,78 @@ export default function RoboticsContactButton() {
       ref={buttonRef}
       onClick={handleClick}
       className={`
-        fixed bottom-8 left-8 z-[9999]
+        fixed bottom-6 left-6 md:bottom-10 md:left-10 z-[999]
         group flex h-16 w-16 items-center justify-center
-        rounded-full bg-gradient-to-br from-cyan-1000 via-cyan-1000 to-blue-900
-        shadow-2xl shadow-cyan-900/40
-        transition-all duration-400
-        hover:scale-110 hover:shadow-cyan-500/60 hover:rotate-6
-        active:scale-95 active:shadow-cyan-400/80
-        focus:outline-none focus:ring-4 focus:ring-cyan-400/50
+        rounded-full 
+        bg-gradient-to-br from-slate-900 via-cyan-950 to-slate-950
+        border border-cyan-800/30
+        shadow-xl shadow-cyan-950/40
+        transition-all duration-500 ease-out
+        hover:shadow-cyan-500/50 hover:border-cyan-400/40
+        active:scale-95 active:shadow-cyan-600/60
+        focus:outline-none focus:ring-4 focus:ring-cyan-500/40 focus:ring-offset-2 focus:ring-offset-slate-950
       `}
-      aria-label="Contact Robotics Engineer on WhatsApp"
-      title="Let's build something advanced together"
+      aria-label="Contact robotics & automation engineer via WhatsApp"
+      title="Discuss your robotics project"
     >
-      {/* Outer glowing ring */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400/20 to-blue-400/10 animate-pulse-slow opacity-70" />
+      {/* Subtle outer metallic ring / energy field */}
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/10 via-teal-400/5 to-cyan-500/10 animate-pulse opacity-60 group-hover:opacity-90 transition-opacity duration-700" />
 
-      {/* Inner robotic icon container */}
-      <div className="relative z-10 flex items-center justify-center h-10 w-10">
-        {/* Robotic arm icon - using clean SVG path (minimalist industrial style) */}
+      {/* Core robotic icon container */}
+      <div className="relative z-10 flex items-center justify-center h-11 w-11">
+        {/* Professional minimalist robotic arm SVG */}
         <svg
-          width="38"
-          height="38"
+          width="44"
+          height="44"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2.2"
+          strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-cyan-400 transition-all duration-400 group-hover:text-cyan-100 group-hover:rotate-12 group-active:scale-90"
+          className="text-cyan-400 group-hover:text-cyan-200 transition-colors duration-400 group-hover:scale-110"
         >
-          {/* Simplified robotic arm / mechanical gripper */}
-          <path d="M3 17l2-2h4l2 2v-6h-4l-2-2" />
-          <path d="M11 9h4l2 2v6h-4l-2-2z" />
-          <circle cx="7" cy="7" r="2" />
-          <circle cx="15" cy="7" r="2" />
-          <line x1="7" y1="7" x2="15" y2="7" />
-          <path d="M11 11v4" />
-          {/* Hydraulic / energy line accent */}
-          <path d="M4 4l16 16" strokeWidth="1.5" strokeDasharray="2 2" className="opacity-60" />
+          {/* Base joint */}
+          <circle cx="12" cy="18" r="3" strokeWidth="2" className="opacity-80" />
+          {/* Lower arm segment */}
+          <path d="M12 15 L12 10" strokeWidth="3" />
+          {/* Upper arm with joint */}
+          <circle cx="12" cy="8" r="2.5" fill="none" />
+          {/* Gripper / end effector - clean industrial style */}
+          <path d="M10 6 L8 3 M14 6 L16 3" strokeWidth="2.8" />
+          <path d="M9 4 L15 4" strokeWidth="2" className="opacity-70" />
+          {/* Hydraulic/energy accent line */}
+          <path
+            d="M5 19 L19 5"
+            strokeWidth="1.4"
+            strokeDasharray="2 3"
+            className="opacity-50 group-hover:opacity-80 transition-opacity"
+          />
         </svg>
 
-        {/* Optional secondary glow */}
-        <div className="absolute inset-[-6px] rounded-full bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-500" />
+        {/* Inner focused glow */}
+        <div className="absolute inset-[-10px] rounded-full bg-cyan-400/15 blur-2xl opacity-0 group-hover:opacity-70 transition-opacity duration-600" />
       </div>
 
-      {/* Very subtle continuous pulse (less aggressive than WhatsApp default) */}
-      <div className="absolute inset-[-4px] rounded-full bg-cyan-500/30 animate-ping-slower opacity-0 group-hover:opacity-40 transition-opacity" />
-        <span className="absolute bottom-full mb-2 hidden w-max rounded bg-gray-800 px-2 py-1 text-xs text-white group-hover:block">
-    Chat on whatsApp
-  </span>
+      {/* Tooltip - professional, always attempts to show on hover */}
+      <span
+        className={`
+          absolute left-full ml-4 top-1/2 -translate-y-1/2
+          hidden md:group-hover:block
+          whitespace-nowrap rounded-md bg-slate-900/95 
+          border border-cyan-800/50 px-4 py-2 text-sm font-medium text-cyan-100
+          shadow-lg shadow-cyan-950/30
+          backdrop-blur-sm
+          transition-all duration-300
+        `}
+      >
+        Chat on WhatsApp – Robotics Services
+      </span>
+
+      {/* Very subtle persistent pulse for visibility */}
+      <div className="absolute inset-[-6px] rounded-full bg-cyan-600/20 animate-ping-slow opacity-30 pointer-events-none" />
     </button>
-    
   );
 }
 
-/* 
-  Add these animations to your global CSS or tailwind.config (recommended)
-  @keyframes ping-slower {
-    75%, 100% { transform: scale(1.6); opacity: 0; }
-  }
-  .animate-ping-slow { animation: ping-slower 4s cubic-bezier(0, 0, 0.2, 1) infinite; }
-  .animate-ping-slower { animation: ping-slower 5s cubic-bezier(0, 0, 0.2, 1) infinite; }
-*/
+/* Add to your global CSS or tailwind.config extend animations */

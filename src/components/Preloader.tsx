@@ -1,12 +1,12 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- * PRELOADER — Cinematic Boot Sequence
+ * PRELOADER — Sci-Fi Robotic Door Opening Sequence
  * ═══════════════════════════════════════════════════════════════
- * Full-screen terminal boot with:
- * 1. Line-by-line terminal typing with glitch flicker
- * 2. Robotic arm stub assembling itself (SVG)
- * 3. Loading progress bar with plasma glow
- * 4. "SYSTEM ONLINE" finale with bloom flash
+ * Full-screen cinematic door opening with:
+ * 1. Two sliding metallic panels with hydraulic damping
+ * 2. Glow lines, scanline, subtle sparks/glitch
+ * 3. Progress bar + percentage during opening
+ * 4. "SYSTEM ACCESS GRANTED" finale + bloom flash
  *
  * Uses a master GSAP timeline for precise sequencing.
  */
@@ -15,34 +15,32 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { EASES } from "@/utils/eases";
+import { EASES } from "@/utils/eases"; // assuming you still have this
 
 interface PreloaderProps {
-  /** Called when boot sequence completes */
+  /** Called when door opening sequence completes */
   onComplete: () => void;
 }
 
-/* ── Terminal boot log lines ── */
-const BOOT_LINES = [
-  "> BIOS v4.2.1 ... OK",
-  "> Initializing servo controllers ...",
-  "> Loading kinematic chain ... 6-DOF",
-  "> Calibrating joint encoders ........ OK",
-  "> Motor drivers [OK] Torque sensors [OK]",
-  "> Vision pipeline ... CUDA 14.2 loaded",
-  "> Neural inference engine ... READY",
-  "> Establishing comm link ... 2.4GHz",
-  "> Safety systems ... ARMED",
-  "> ALL SYSTEMS NOMINAL",
-  "> Its only for Ahsan Bashir's Portfolio, but it looks so cool!"
+/* ── Status messages ── */
+const STATUS_LINES = [
+  "AUTHENTICATING BIOMETRICS...",
+  "DECRYPTING ACCESS PROTOCOL...",
+  "PRESSURE EQUALIZATION... 47%",
+  "HYDRAULIC SYSTEMS PRIMED",
+  "SECURITY GRID OFFLINE",
+  "CORE LOCKS DISENGAGED",
+  "ITS ONLY FOR AHSAN BASHIR'S PORTFOLIO, BUT IT LOOKS EPIC!"
 ];
 
 export default function Preloader({ onComplete }: PreloaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const terminalRef = useRef<HTMLDivElement>(null);
+  const leftDoorRef = useRef<HTMLDivElement>(null);
+  const rightDoorRef = useRef<HTMLDivElement>(null);
+  const glowLineLeftRef = useRef<HTMLDivElement>(null);
+  const glowLineRightRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
-  const armSvgRef = useRef<SVGSVGElement>(null);
   const flashRef = useRef<HTMLDivElement>(null);
   const [, setForceRender] = useState(0);
 
@@ -56,162 +54,192 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         },
       });
 
-      /* ─────────────────────────────
-         PHASE 1: Terminal Boot Text
-         ───────────────────────────── */
-      const terminalLines =
-        terminalRef.current?.querySelectorAll(".boot-line") ?? [];
+      // ── PHASE 1: Status text typing ──
+      const statusLines = statusRef.current?.querySelectorAll(".status-line") ?? [];
 
-      terminalLines.forEach((line, i) => {
+      statusLines.forEach((line, i) => {
         master.fromTo(
           line,
-          { opacity: 0, x: -10 },
+          { opacity: 0, y: 6 },
           {
             opacity: 1,
-            x: 0,
-            duration: 0.08,
+            y: 0,
+            duration: 0.09,
             ease: "power1.out",
           },
-          i * 0.18
+          i * 0.22
         );
 
-        /* Glitch flicker on every 3rd line */
-        if (i % 3 === 2) {
+        // occasional glitch flicker
+        if (i % 3 === 1) {
           master.to(
             line,
             {
-              opacity: 0.3,
-              x: 3,
-              duration: 0.04,
+              opacity: 0.4,
+              x: 4,
+              duration: 0.05,
               yoyo: true,
               repeat: 2,
               ease: "none",
             },
-            `>-0.05`
+            ">-0.08"
           );
         }
       });
 
-      /* ─────────────────────────────
-         PHASE 2: Mini Arm Assembly
-         ───────────────────────────── */
-      const armParts = armSvgRef.current?.querySelectorAll(".arm-segment") ?? [];
-
+      // ── PHASE 2: Doors start to unlock / glow ──
       master.fromTo(
-        armParts,
-        { opacity: 0, scaleY: 0, transformOrigin: "bottom center" },
+        [glowLineLeftRef.current, glowLineRightRef.current],
+        { scaleX: 0, opacity: 0 },
         {
-          opacity: 1,
-          scaleY: 1,
-          duration: 0.4,
+          scaleX: 1,
+          opacity: 0.7,
+          duration: 0.8,
           stagger: 0.15,
-          ease: EASES.mechanicalSnap,
+          ease: "power2.inOut",
         },
-        "-=0.5"
+        "-=0.6"
       );
 
-      /* Joint glow pulse after assembly */
-      const joints = armSvgRef.current?.querySelectorAll(".joint-glow") ?? [];
-      master.fromTo(
-        joints,
-        { opacity: 0, scale: 0 },
+      // Pulse glow
+      master.to(
+        [glowLineLeftRef.current, glowLineRightRef.current],
         {
-          opacity: 1,
-          scale: 1,
-          duration: 0.3,
-          stagger: 0.1,
-          ease: EASES.bounceLanding,
+          opacity: 0.9,
+          repeat: 1,
+          yoyo: true,
+          duration: 0.6,
+          ease: "sine.inOut",
         },
-        "-=0.3"
+        "-=0.4"
       );
 
-      /* ─────────────────────────────
-         PHASE 3: Progress Bar Fill
-         ───────────────────────────── */
+      // ── PHASE 3: Doors slide open ──
+      master.to(
+        leftDoorRef.current,
+        {
+          x: "-100%",
+          duration: 2.2,
+          ease: EASES.hydraulicDampen, // ← slow start, powerful middle, smooth stop
+        },
+        "-=0.7"
+      );
+
+      master.to(
+        rightDoorRef.current,
+        {
+          x: "100%",
+          duration: 2.2,
+          ease: EASES.hydraulicDampen,
+        },
+        "<" // same time as left door
+      );
+
+      // Slight overshoot + settle (mechanical feel)
+      master.to(
+        leftDoorRef.current,
+        {
+          x: "-96%",
+          duration: 0.4,
+          ease: "back.out(1.6)",
+        },
+        ">-0.3"
+      );
+
+      master.to(
+        rightDoorRef.current,
+        {
+          x: "96%",
+          duration: 0.4,
+          ease: "back.out(1.6)",
+        },
+        "<"
+      );
+
+      // ── PHASE 4: Progress bar + percentage ──
       master.fromTo(
         progressRef.current,
         { scaleX: 0, transformOrigin: "left center" },
         {
           scaleX: 1,
-          duration: 1.2,
+          duration: 2.2,
           ease: EASES.hydraulicDampen,
         },
-        "-=0.2"
+        "-=2.0" // start ~same time as doors
       );
 
-      /* Progress percentage counter */
       const counter = { val: 0 };
       master.to(
         counter,
         {
           val: 100,
-          duration: 1.2,
+          duration: 2.2,
           ease: EASES.hydraulicDampen,
           onUpdate: () => {
             if (statusRef.current) {
-              statusRef.current.textContent = `${Math.round(counter.val)}%`;
+              // override last line with percentage during opening
+              const lastLine = statusLines[statusLines.length - 1];
+              if (lastLine) lastLine.textContent = `${Math.round(counter.val)}%`;
             }
           },
         },
         "<"
       );
 
-      /* ─────────────────────────────
-         PHASE 4: SYSTEM ONLINE Flash
-         ───────────────────────────── */
-      /* Status text swap */
+      // ── PHASE 5: Final status + bloom flash ──
       master.to(statusRef.current, {
         opacity: 0,
-        duration: 0.1,
+        duration: 0.12,
         onComplete: () => {
           if (statusRef.current) {
-            statusRef.current.textContent = "SYSTEM ONLINE";
-            statusRef.current.classList.add("text-glow-cyan");
+            statusRef.current.innerHTML = '<div class="text-glow-cyan font-bold tracking-widest">SYSTEM ACCESS GRANTED</div>';
+            setForceRender((v) => v + 1);
           }
-          setForceRender((v) => v + 1);
         },
       });
 
       master.to(statusRef.current, {
         opacity: 1,
-        scale: 1.1,
-        duration: 0.3,
+        scale: 1.12,
+        duration: 0.4,
         ease: EASES.mechanicalSnap,
       });
 
       master.to(statusRef.current, {
         scale: 1,
-        duration: 0.2,
+        duration: 0.25,
       });
 
-      /* Full-screen bloom flash */
+      // Bloom flash
       master.fromTo(
         flashRef.current,
         { opacity: 0 },
         {
-          opacity: 0.8,
-          duration: 0.15,
+          opacity: 0.85,
+          duration: 0.18,
           ease: "power2.in",
         },
-        "-=0.2"
+        "-=0.3"
       );
 
       master.to(flashRef.current, {
         opacity: 0,
-        duration: 0.6,
+        duration: 0.7,
         ease: "power2.out",
       });
 
-      /* ─────────────────────────────
-         PHASE 5: Fade Out Preloader
-         ───────────────────────────── */
-      master.to(containerRef.current, {
-        opacity: 0,
-        scale: 1.02,
-        duration: 0.6,
-        ease: "power2.inOut",
-        delay: 0.3,
-      });
+      // ── PHASE 6: Fade out whole preloader ──
+      master.to(
+        containerRef.current,
+        {
+          opacity: 0,
+          scale: 1.015,
+          duration: 0.7,
+          ease: "power2.inOut",
+          delay: 0.4,
+        },
+        "+=0.2"
+      );
     },
     { scope: containerRef }
   );
@@ -219,109 +247,69 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   return (
     <div
       ref={containerRef}
-      className="fixed mt-20 md:mt-0 inset-0 z-[100] flex flex-col items-center justify-center bg-cyber-bg"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-cyber-bg overflow-hidden"
       role="status"
       aria-label="Loading application"
       aria-live="polite"
     >
-      {/* ── Scanline overlay ── */}
+      {/* Scanlines overlay */}
       <div className="scanlines pointer-events-none absolute inset-0" />
 
-      {/* ── Bloom flash layer ── */}
+      {/* Bloom flash layer */}
       <div
         ref={flashRef}
         className="pointer-events-none absolute inset-0 bg-neon-cyan opacity-0"
         style={{ mixBlendMode: "screen" }}
       />
 
-      <div className="relative flex w-full max-w-2xl flex-col items-center gap-8 px-8">
-        {/* ── Terminal Output ── */}
+      {/* ── Left Door Panel ── */}
+      <div
+        ref={leftDoorRef}
+        className="absolute left-0 top-0 h-full w-1/2 bg-gradient-to-r from-metal-dark to-[#1a202c] border-r border-neon-cyan/30 shadow-2xl"
+        style={{ transform: "translateX(0%)" }}
+      >
         <div
-          ref={terminalRef}
-          className="preloader-terminal w-full rounded border border-metal-dark/50 bg-cyber-panel/80 p-6 backdrop-blur-sm"
-        >
-          {BOOT_LINES.map((line, i) => (
-            <div key={i} className="boot-line opacity-0">
+          ref={glowLineLeftRef}
+          className="absolute right-0 top-0 h-full w-1.5 bg-gradient-to-b from-transparent via-neon-cyan to-transparent opacity-0"
+        />
+      </div>
+
+      {/* ── Right Door Panel ── */}
+      <div
+        ref={rightDoorRef}
+        className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-metal-dark to-[#1a202c] border-l border-neon-cyan/30 shadow-2xl"
+        style={{ transform: "translateX(0%)" }}
+      >
+        <div
+          ref={glowLineRightRef}
+          className="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-transparent via-neon-cyan to-transparent opacity-0"
+        />
+      </div>
+
+      {/* ── Center Content (status + progress) ── */}
+      <div className="relative z-10 flex w-full max-w-2xl flex-col items-center gap-10 px-8">
+        {/* Status messages */}
+        <div ref={statusRef} className="font-mono text-cyan-300 text-lg md:text-xl tracking-wider text-center leading-relaxed">
+          {STATUS_LINES.map((line, i) => (
+            <div key={i} className="status-line opacity-0">
               {line}
             </div>
           ))}
-          <span className="terminal-cursor" />
         </div>
 
-        {/* ── Mini Robotic Arm Assembly ── */}
-        <svg
-          ref={armSvgRef}
-          viewBox="0 0 200 160"
-          width="200"
-          height="160"
-          className="drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]"
-          aria-hidden="true"
-        >
-          {/* Base */}
-          <rect
-            className="arm-segment"
-            x="80"
-            y="130"
-            width="40"
-            height="20"
-            rx="4"
-            fill="#2a2f3f"
-            stroke="#4a5568"
-            strokeWidth="1"
-          />
-          {/* Lower arm */}
-          <rect
-            className="arm-segment"
-            x="92"
-            y="80"
-            width="16"
-            height="55"
-            rx="3"
-            fill="#2a2f3f"
-            stroke="#4a5568"
-            strokeWidth="1"
-          />
-          {/* Upper arm */}
-          <rect
-            className="arm-segment"
-            x="94"
-            y="35"
-            width="12"
-            height="50"
-            rx="3"
-            fill="#2a2f3f"
-            stroke="#4a5568"
-            strokeWidth="1"
-          />
-          {/* Gripper */}
-          <path
-            className="arm-segment"
-            d="M93 35 L85 15 M107 35 L115 15"
-            stroke="#2a2f3f"
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-
-          {/* Joint glows */}
-          <circle className="joint-glow" cx="100" cy="130" r="4" fill="#00f0ff" opacity="0" />
-          <circle className="joint-glow" cx="100" cy="80" r="4" fill="#00f0ff" opacity="0" />
-          <circle className="joint-glow" cx="100" cy="35" r="3" fill="#00f0ff" opacity="0" />
-        </svg>
-
-        {/* ── Progress Bar ── */}
-        <div className="w-full">
-          <div className="mb-2 flex items-center justify-between font-mono text-xs text-text-muted">
-            <span>BOOT SEQUENCE</span>
-            <span ref={statusRef}>0%</span>
-          </div>
-          <div className="h-1 w-full overflow-hidden rounded-full bg-metal-dark">
-            <div ref={progressRef} className="loading-bar h-full w-full rounded-full" />
+        {/* Progress bar */}
+        <div className="w-full max-w-md">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-metal-dark/70 border border-neon-cyan/20">
+            <div
+              ref={progressRef}
+              className="h-full w-full rounded-full bg-gradient-to-r from-neon-cyan via-cyan-400 to-neon-cyan"
+              style={{ transform: "scaleX(0)", transformOrigin: "left" }}
+            />
           </div>
         </div>
 
-        {/* ── Version / Footer ── */}
-        <p className="font-mono text-[10px] tracking-widest text-text-muted">
-          ROBO.FOLIO OS v2.0.26 — KERNEL LOADED
+        <p className="font-mono text-xs tracking-widest text-text-muted/70">
+          ROBO.FOLIO GATEWAY v2.1.8 — ACCESS SEQUENCE
         </p>
       </div>
     </div>
