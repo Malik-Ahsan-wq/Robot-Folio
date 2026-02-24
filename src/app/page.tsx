@@ -16,6 +16,7 @@ import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import Timeline from "@/components/Timeline";
 import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
 export default function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -48,6 +49,7 @@ export default function HomePage() {
         <Projects />
         <Timeline />
         <Contact />
+        <Footer/>
       </main>
     </>
   );
