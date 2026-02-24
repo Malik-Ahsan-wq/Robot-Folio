@@ -25,8 +25,6 @@ export default function Navigation() {
   const [activeSection, setActiveSection] = useState("hero");
   const [isVisible, setIsVisible] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [direction, setDirection] = useState<"up" | "down">("up");
 
   // ── Active section tracking ────────────────────────────────────────
   useEffect(() => {
@@ -54,23 +52,7 @@ export default function Navigation() {
     };
   }, []);
 
-  // ── Show/hide on scroll direction ──────────────────────────────────
-  const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
 
-    if (currentScrollY > lastScrollY && currentScrollY > 150) {
-      setDirection("down");
-    } else {
-      setDirection("up");
-    }
-
-    setLastScrollY(currentScrollY);
-  }, [lastScrollY]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
 
   // ── Entrance animation ─────────────────────────────────────────────
   useGSAP(
@@ -142,14 +124,9 @@ export default function Navigation() {
 
   if (!isVisible) return null;
 
-  const navClasses = `
-    fixed top-0 left-0 right-0 z-[999] transition-all duration-500
-    ${direction === "down" && window.scrollY > 100 ? "-translate-y-full" : "translate-y-0"}
-  `;
-
   return (
     <>
-      <nav ref={navRef} className={navClasses} aria-label="Main navigation">
+      <nav ref={navRef} className="fixed top-0 left-0 right-0 z-[999]" aria-label="Main navigation">
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <div
             className="
