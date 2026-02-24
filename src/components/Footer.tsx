@@ -51,8 +51,21 @@ export default function Footer() {
     }
     setEmailError("");
     setEmailState("loading");
-    await new Promise((r) => setTimeout(r, 1400));
-    setEmailState("done");
+    
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) throw new Error('Failed to subscribe');
+      
+      setEmailState("done");
+    } catch (error) {
+      setEmailError("Failed to subscribe. Try again.");
+      setEmailState("idle");
+    }
   };
 
   return (
@@ -327,16 +340,16 @@ export default function Footer() {
                     className="flex items-center gap-2 font-mono text-[10px] text-slate-600 hover:text-cyan-400 transition-colors"
                   >
                     <Mail size={11} />
-                    your@email.com
+                   ahsanmalikking57@gmail.com
                   </a>
                   <a
-                    href="https://linkedin.com/"
+                    href="https://www.linkedin.com/in/m-ahsan-bashir/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 font-mono text-[10px] text-slate-600 hover:text-cyan-400 transition-colors"
                   >
                     <Linkedin size={11} />
-                    linkedin.com/in/ahsanmalik
+                    https://www.linkedin.com/in/m-ahsan-bashir/
                   </a>
                 </div>
               </form>

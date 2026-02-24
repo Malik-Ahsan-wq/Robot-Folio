@@ -10,6 +10,7 @@
 
 import { type ReactNode } from "react";
 import SmoothScroll from "@/components/SmoothScroll";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export default function ClientShell({ children }: { children: ReactNode }) {
@@ -18,6 +19,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
   return (
     <SmoothScroll disabled={prefersReduced}>
       {children}
+      <WhatsAppButton />
     </SmoothScroll>
   );
 }

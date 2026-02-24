@@ -120,10 +120,27 @@ export default function Contact() {
       }
     }
 
-    /* Simulate transmission delay */
-    await new Promise<void>((resolve) => setTimeout(resolve, 2200));
+    /* Send email via API */
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message }),
+      });
 
-    setTerminalState("success");
+      if (!response.ok) throw new Error('Failed to send');
+
+      setTerminalState("success");
+    } catch (error) {
+      setTerminalState("error");
+      setTerminalOutput((prev) => [
+        ...prev,
+        "> ERROR: TRANSMISSION FAILED",
+        "> STATUS: CONNECTION LOST",
+      ]);
+      setTimeout(() => setTerminalState("idle"), 3000);
+      return;
+    }
     setTerminalOutput((prev) => [
       ...prev,
       "> TRANSMISSION COMPLETE ✓",
@@ -236,7 +253,7 @@ export default function Contact() {
               {/* Name */}
               <div className="group">
                 <label className="mb-1 block font-mono text-[10px] tracking-wider text-text-muted">
-                  IDENTIFIER
+                  IDENTIFIER:UserName
                 </label>
                 <div className="flex items-center gap-2 rounded border border-metal-dark/50 bg-cyber-bg/40 px-3 py-2 transition-colors focus-within:border-neon-cyan/40">
                   <span className="font-mono text-xs text-neon-cyan/50">{">"}</span>
@@ -254,7 +271,7 @@ export default function Contact() {
               {/* Email */}
               <div className="group">
                 <label className="mb-1 block font-mono text-[10px] tracking-wider text-text-muted">
-                  COMM FREQUENCY
+                  COMM FREQUENCY:Email
                 </label>
                 <div className="flex items-center gap-2 rounded border border-metal-dark/50 bg-cyber-bg/40 px-3 py-2 transition-colors focus-within:border-neon-cyan/40">
                   <span className="font-mono text-xs text-neon-cyan/50">{">"}</span>
@@ -272,7 +289,7 @@ export default function Contact() {
               {/* Message */}
               <div className="group">
                 <label className="mb-1 block font-mono text-[10px] tracking-wider text-text-muted">
-                  PAYLOAD
+                  PAYLOAD:Message
                 </label>
                 <div className="rounded border border-metal-dark/50 bg-cyber-bg/40 px-3 py-2 transition-colors focus-within:border-neon-cyan/40">
                   <textarea
