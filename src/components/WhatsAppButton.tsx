@@ -1,35 +1,107 @@
 'use client';
 
-export default function WhatsAppButton() {
+import { useEffect, useRef } from 'react';
+
+export default function RoboticsContactButton() {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   const phoneNumber = "03276227156";
-  const message = "Hello! I'm interested in your services.";
-  
-  const handleWhatsAppClick = () => {
+  const message = "Hello! I'm interested in your robotics / automation services.";
+
+  const handleClick = () => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
+
+  useEffect(() => {
+    if (!buttonRef.current) return;
+
+    // Simple hover / active micro-animations (optional enhancement)
+    const btn = buttonRef.current;
+
+    const handleMouseEnter = () => {
+      btn.style.transform = 'scale(1.15) rotate(8deg)';
+      btn.style.boxShadow = '0 0 40px rgba(17, 36, 36, 0.7)';
+    };
+
+    const handleMouseLeave = () => {
+      btn.style.transform = 'scale(1) rotate(0deg)';
+      btn.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+    };
+
+    btn.addEventListener('mouseenter', handleMouseEnter);
+    btn.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      btn.removeEventListener('mouseenter', handleMouseEnter);
+      btn.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
 
   return (
     <button
-      onClick={handleWhatsAppClick}
-      className="fixed bottom-6 left-6 z-50 group flex h-14 w-14 items-center justify-center rounded-full bg-green-500 shadow-lg transition-all duration-300 hover:bg-green-600 hover:scale-110 hover:shadow-xl"
-      aria-label="Contact us on WhatsApp"
+      ref={buttonRef}
+      onClick={handleClick}
+      className={`
+        fixed bottom-8 left-8 z-[9999]
+        group flex h-16 w-16 items-center justify-center
+        rounded-full bg-gradient-to-br from-cyan-1000 via-cyan-1000 to-blue-900
+        shadow-2xl shadow-cyan-900/40
+        transition-all duration-400
+        hover:scale-110 hover:shadow-cyan-500/60 hover:rotate-6
+        active:scale-95 active:shadow-cyan-400/80
+        focus:outline-none focus:ring-4 focus:ring-cyan-400/50
+      `}
+      aria-label="Contact Robotics Engineer on WhatsApp"
+      title="Let's build something advanced together"
     >
-      <svg
-        width="28"
-        height="28"
-        viewBox="0 0 24 24"
-        fill="none"
-        className="transition-transform duration-300 group-hover:scale-110"
-      >
-        <path
-          d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516"
-          fill="white"
-        />
-      </svg>
-      
-      {/* Pulse animation */}
-      <div className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-20" />
+      {/* Outer glowing ring */}
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400/20 to-blue-400/10 animate-pulse-slow opacity-70" />
+
+      {/* Inner robotic icon container */}
+      <div className="relative z-10 flex items-center justify-center h-10 w-10">
+        {/* Robotic arm icon - using clean SVG path (minimalist industrial style) */}
+        <svg
+          width="38"
+          height="38"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-cyan-400 transition-all duration-400 group-hover:text-cyan-100 group-hover:rotate-12 group-active:scale-90"
+        >
+          {/* Simplified robotic arm / mechanical gripper */}
+          <path d="M3 17l2-2h4l2 2v-6h-4l-2-2" />
+          <path d="M11 9h4l2 2v6h-4l-2-2z" />
+          <circle cx="7" cy="7" r="2" />
+          <circle cx="15" cy="7" r="2" />
+          <line x1="7" y1="7" x2="15" y2="7" />
+          <path d="M11 11v4" />
+          {/* Hydraulic / energy line accent */}
+          <path d="M4 4l16 16" strokeWidth="1.5" strokeDasharray="2 2" className="opacity-60" />
+        </svg>
+
+        {/* Optional secondary glow */}
+        <div className="absolute inset-[-6px] rounded-full bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-500" />
+      </div>
+
+      {/* Very subtle continuous pulse (less aggressive than WhatsApp default) */}
+      <div className="absolute inset-[-4px] rounded-full bg-cyan-500/30 animate-ping-slower opacity-0 group-hover:opacity-40 transition-opacity" />
+        <span className="absolute bottom-full mb-2 hidden w-max rounded bg-gray-800 px-2 py-1 text-xs text-white group-hover:block">
+    Chat on whatsApp
+  </span>
     </button>
+    
   );
 }
+
+/* 
+  Add these animations to your global CSS or tailwind.config (recommended)
+  @keyframes ping-slower {
+    75%, 100% { transform: scale(1.6); opacity: 0; }
+  }
+  .animate-ping-slow { animation: ping-slower 4s cubic-bezier(0, 0, 0.2, 1) infinite; }
+  .animate-ping-slower { animation: ping-slower 5s cubic-bezier(0, 0, 0.2, 1) infinite; }
+*/

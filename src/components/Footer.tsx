@@ -5,12 +5,12 @@ import { useState, useEffect, useRef } from "react";
 import { Cpu, Github, Linkedin, Mail, Terminal, Zap, Code2, ExternalLink } from "lucide-react";
 
 const NAV_LINKS = [
-  { name: "Home", href: "/", code: "01" },
-  { name: "About", href: "/about", code: "02" },
-  { name: "Skills", href: "/skills", code: "03" },
-  { name: "Projects", href: "/projects", code: "04" },
-  { name: "Timeline", href: "/timeline", code: "05" },
-  { name: "Contact", href: "/contact", code: "06" },
+  { name: "Home", target: "hero", code: "01" },
+  { name: "About", target: "about", code: "02" },
+  { name: "Skills", target: "skills", code: "03" },
+  { name: "Projects", target: "projects", code: "04" },
+  { name: "Timeline", target: "timeline", code: "05" },
+  { name: "Contact", target: "contact", code: "06" },
 ];
 
 const STATS = [
@@ -194,8 +194,8 @@ export default function Footer() {
             <div className="flex gap-2 pt-1">
               {[
                 { label: "GitHub", href: "https://github.com/", icon: <Github size={17} /> },
-                { label: "LinkedIn", href: "https://linkedin.com/", icon: <Linkedin size={17} /> },
-                { label: "Email", href: "mailto:your@email.com", icon: <Mail size={17} /> },
+                { label: "LinkedIn", href: "https://www.linkedin.com/in/m-ahsan-bashir/", icon: <Linkedin size={17} /> },
+                { label: "Email", href: "mailto:ahsanmalikking57@gmail.com", icon: <Mail size={17} /> },
               ].map((s) => (
                 <a
                   key={s.label}
@@ -224,9 +224,17 @@ export default function Footer() {
             <ul className="space-y-2.5" role="list">
               {NAV_LINKS.map((link) => (
                 <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="group flex items-center gap-3 text-sm text-slate-400 transition-colors duration-200 hover:text-cyan-300"
+                  <button
+                    onClick={() => {
+                      const element = document.getElementById(link.target);
+                      if (element) {
+                        element.scrollIntoView({ 
+                          behavior: 'smooth',
+                          block: 'start'
+                        });
+                      }
+                    }}
+                    className="group flex items-center gap-3 text-sm text-slate-400 transition-colors duration-200 hover:text-cyan-300 w-full text-left"
                   >
                     <span className="font-mono text-[10px] text-slate-700 group-hover:text-cyan-600 transition-colors">
                       {link.code}
@@ -239,7 +247,7 @@ export default function Footer() {
                       size={10}
                       className="ml-auto text-slate-700 opacity-0 transition-opacity group-hover:opacity-60"
                     />
-                  </Link>
+                  </button>
                 </li>
               ))}
             </ul>
