@@ -1,10 +1,13 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- * CONTACT — Command Terminal Interface
+ * CONTACT — Secure Robotics Terminal Interface v2.1
  * ═══════════════════════════════════════════════════════════════
- * Full terminal aesthetic: blinking prompt, input echoes with
- * green phosphor glow. Submit → "TRANSMITTING" progress.
- * Success: micro robotic confetti (tiny SVG parts).
+ * Professional cyber-industrial aesthetic:
+ * • Blinking command prompt
+ * • Typed input echo simulation
+ * • Gradient transmitting progress
+ * • Subtle circuit-spark success particles
+ * • Clean status messaging
  */
 "use client";
 
@@ -16,344 +19,334 @@ import { EASES } from "@/utils/eases";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type TerminalState = "idle" | "transmitting" | "success" | "error";
+type TerminalState = "idle" | "typing" | "transmitting" | "success" | "error";
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const confettiRef = useRef<HTMLDivElement>(null);
-  const statusLineRef = useRef<HTMLDivElement>(null);
-  const [terminalState, setTerminalState] = useState<TerminalState>("idle");
-  const [terminalOutput, setTerminalOutput] = useState<string[]>([
-    "ROBO.FOLIO Terminal v2.0.26",
-    "Type your message. All fields required.",
-    "─────────────────────────────────────",
+  const particlesRef = useRef<HTMLDivElement>(null);
+  const [state, setState] = useState<TerminalState>("idle");
+  const [output, setOutput] = useState<string[]>([
+    "ROBO.FOLIO SECURE TERMINAL v2.1",
+    "Establish encrypted uplink — all fields mandatory",
+    "───────────────────────────────────────────────",
   ]);
 
-  /* ── Section entrance animation ── */
-  useGSAP(
-    () => {
-      if (!sectionRef.current) return;
+  // Entrance animations
+  useGSAP(() => {
+    if (!sectionRef.current) return;
 
-      const heading = sectionRef.current.querySelector(".section-heading");
-      if (heading) {
-        gsap.fromTo(
-          heading,
-          { opacity: 0, x: -60 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 1,
-            ease: EASES.hydraulicDampen,
-            scrollTrigger: {
-              trigger: heading,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
+    gsap.fromTo(
+      ".section-heading",
+      { opacity: 0, y: -30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.1,
+        ease: EASES.hydraulicDampen,
+        scrollTrigger: {
+          trigger: ".section-heading",
+          start: "top 82%",
+        },
       }
+    );
 
-      /* Terminal box entrance */
-      if (terminalRef.current) {
-        gsap.fromTo(
-          terminalRef.current,
-          { opacity: 0, y: 60, scale: 0.95 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.8,
-            ease: EASES.mechanicalSnap,
-            scrollTrigger: {
-              trigger: terminalRef.current,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
+    gsap.fromTo(
+      terminalRef.current,
+      { opacity: 0, y: 50, scale: 0.96 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1,
+        ease: EASES.mechanicalSnap,
+        scrollTrigger: {
+          trigger: terminalRef.current,
+          start: "top 80%",
+        },
       }
-    },
-    { scope: sectionRef }
-  );
+    );
+  }, { scope: sectionRef });
 
-  /* ── Form submission handler ── */
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (terminalState === "transmitting") return;
+    if (state !== "idle") return;
 
     const formData = new FormData(formRef.current!);
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const message = formData.get("message") as string;
+    const name = formData.get("name")?.toString().trim();
+    const email = formData.get("email")?.toString().trim();
+    const message = formData.get("message")?.toString().trim();
 
     if (!name || !email || !message) return;
 
-    setTerminalState("transmitting");
-    setTerminalOutput((prev) => [
+    // Step 1: Show typing simulation
+    setState("typing");
+    setOutput((prev) => [
       ...prev,
       "",
-      `> FROM: ${name} <${email}>`,
-      `> MSG: "${message.slice(0, 50)}${message.length > 50 ? "..." : ""}"`,
+      `> INITIATING TRANSMISSION FROM: ${name}`,
+      `> COMM ID: ${email}`,
+      `> PAYLOAD LENGTH: ${message.length} chars`,
+      "> AUTHENTICATING... OK",
       "",
-      "> TRANSMITTING ████████░░░░░░░░░░",
     ]);
 
-    /* Transmitting animation on status line */
-    if (statusLineRef.current) {
-      const tl = gsap.timeline();
-      tl.fromTo(
-        statusLineRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.3 }
-      );
+    await new Promise((r) => setTimeout(r, 1200));
 
-      /* Progress bar animation */
-      const bar = statusLineRef.current.querySelector(".tx-bar");
-      if (bar) {
-        tl.fromTo(
-          bar,
-          { scaleX: 0, transformOrigin: "left" },
-          { scaleX: 1, duration: 2, ease: "power1.inOut" }
-        );
-      }
-    }
+    // Step 2: Transmitting
+    setState("transmitting");
+    setOutput((prev) => [
+      ...prev,
+      "> ESTABLISHING SECURE CHANNEL...",
+      "> TRANSMITTING [          ]",
+    ]);
 
-    /* Send email via API */
+    // Progress simulation + real send
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message }),
       });
 
-      if (!response.ok) throw new Error('Failed to send');
+      if (!res.ok) throw new Error();
 
-      setTerminalState("success");
-    } catch (error) {
-      setTerminalState("error");
-      setTerminalOutput((prev) => [
-        ...prev,
-        "> ERROR: TRANSMISSION FAILED",
-        "> STATUS: CONNECTION LOST",
+      // Success path
+      setOutput((prev) => [
+        ...prev.slice(0, -1),
+        "> TRANSMISSION COMPLETE ✓",
+        "> SERVER RESPONSE: 200 OK",
+        "> MESSAGE LOGGED IN SECURE ARCHIVE",
       ]);
-      setTimeout(() => setTerminalState("idle"), 3000);
-      return;
+
+      setState("success");
+      triggerSuccessParticles();
+
+      setTimeout(() => {
+        setState("idle");
+        formRef.current?.reset();
+      }, 3400);
+    } catch {
+      setOutput((prev) => [
+        ...prev.slice(0, -1),
+        "> ERROR: TRANSMISSION INTERRUPTED",
+        "> CHECK CONNECTION / TRY AGAIN LATER",
+      ]);
+      setState("error");
+      setTimeout(() => setState("idle"), 4000);
     }
-    setTerminalOutput((prev) => [
-      ...prev,
-      "> TRANSMISSION COMPLETE ✓",
-      "> STATUS: MESSAGE RECEIVED",
-      "> STAMPING APPROVAL...",
-    ]);
+  };
 
-    /* ── Confetti: tiny SVG parts flying outward ── */
-    if (confettiRef.current) {
-      const colors = ["#00f0ff", "#ff00d4", "#ff4d00", "#00ff88"];
-      const shapes = ["●", "■", "▲", "⬡", "◆"];
+  const triggerSuccessParticles = () => {
+    if (!particlesRef.current) return;
 
-      for (let i = 0; i < 20; i++) {
-        const particle = document.createElement("span");
-        particle.textContent = shapes[i % shapes.length];
-        particle.style.position = "absolute";
-        particle.style.left = "50%";
-        particle.style.top = "50%";
-        particle.style.color = colors[i % colors.length];
-        particle.style.fontSize = `${8 + Math.random() * 8}px`;
-        particle.style.pointerEvents = "none";
-        confettiRef.current.appendChild(particle);
+    const colors = ["#22d3ee", "#67e8f9", "#a5f3fc", "#06b6d4"];
+    const symbols = ["⚙", "⌬", "⟡", "⟁", "◆"];
 
-        gsap.to(particle, {
-          x: (Math.random() - 0.5) * 400,
-          y: (Math.random() - 0.5) * 300 - 100,
-          rotation: Math.random() * 720 - 360,
-          opacity: 0,
-          scale: 0,
-          duration: 1.5 + Math.random(),
-          ease: "power2.out",
-          delay: Math.random() * 0.3,
-          onComplete: () => particle.remove(),
-        });
-      }
+    for (let i = 0; i < 24; i++) {
+      const el = document.createElement("div");
+      el.textContent = symbols[i % symbols.length];
+      el.style.position = "absolute";
+      el.style.left = "50%";
+      el.style.top = "50%";
+      el.style.color = colors[i % colors.length];
+      el.style.fontSize = `${10 + Math.random() * 10}px`;
+      el.style.opacity = "0.9";
+      el.style.pointerEvents = "none";
+      particlesRef.current.appendChild(el);
+
+      gsap.to(el, {
+        x: (Math.random() - 0.5) * 480,
+        y: (Math.random() - 0.5) * 360 - 120,
+        rotation: Math.random() * 600 - 300,
+        opacity: 0,
+        scale: 0.2,
+        duration: 1.4 + Math.random() * 0.8,
+        ease: "power3.out",
+        delay: Math.random() * 0.4,
+        onComplete: () => el.remove(),
+      });
     }
-
-    /* Reset after a delay */
-    setTimeout(() => {
-      setTerminalState("idle");
-      formRef.current?.reset();
-    }, 3000);
   };
 
   return (
     <section
       ref={sectionRef}
       id="contact"
-      className="relative min-h-screen overflow-hidden bg-cyber-bg py-32"
-      aria-label="Contact section"
+      className="relative py-28 md:py-36 bg-gradient-to-b from-[#0a0e17] to-[#000306]"
     >
-      <div className="grid-bg absolute inset-0 opacity-20" />
-      <div className="absolute left-0 top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-neon-cyan/20 to-transparent" />
+      {/* Subtle background grid */}
+      <div className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(rgba(34,211,238,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.06)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-      <div className="relative z-10 mx-auto max-w-3xl px-6">
-        {/* ── Section Header ── */}
-        <div className="section-heading mb-16 text-center opacity-0">
-          <div className="mb-4 flex items-center justify-center gap-4">
-            <span className="h-[2px] w-12 bg-neon-cyan" />
-            <span className="font-mono text-xs tracking-[0.3em] text-neon-cyan">
-              05 — UPLINK
+      <div className="relative z-10 mx-auto max-w-4xl px-5 sm:px-8">
+        {/* Header */}
+        <div className="section-heading mb-14 text-center">
+          <div className="mb-5 flex items-center justify-center gap-6">
+            <div className="h-px w-16 bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent" />
+            <span className="font-mono text-xs tracking-[0.35em] text-cyan-400/80 uppercase">
+              UPLINK / CONTACT
             </span>
-            <span className="h-[2px] w-12 bg-neon-cyan" />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent via-cyan-500/60 to-transparent" />
           </div>
-          <h2 className="font-display text-4xl font-bold text-text-primary sm:text-5xl">
-            COMMAND <span className="text-neon-cyan text-glow-cyan">TERMINAL</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+            COMMAND <span className="text-cyan-400 text-glow">TERMINAL</span>
           </h2>
-          <p className="mt-4 font-body text-text-secondary">
-            Establish a communication link. All transmissions are encrypted.
+          <p className="mt-4 text-lg text-gray-400 max-w-xl mx-auto">
+            Secure channel established. Transmit your inquiry.
           </p>
         </div>
 
-        {/* ── Terminal Window ── */}
+        {/* Terminal */}
         <div
           ref={terminalRef}
-          className="relative overflow-hidden rounded-xl border border-metal-dark/50 bg-cyber-panel/80 opacity-0 backdrop-blur-xl"
+          className="relative rounded-xl overflow-hidden border border-cyan-900/40 bg-gradient-to-b from-[#0f1625] to-[#0a0f1c] shadow-2xl shadow-black/60 backdrop-blur-sm"
         >
           {/* Title bar */}
-          <div className="flex items-center gap-2 border-b border-metal-dark/30 bg-cyber-bg/60 px-4 py-2.5">
-            <span className="h-3 w-3 rounded-full bg-red-500/60" />
-            <span className="h-3 w-3 rounded-full bg-yellow-500/60" />
-            <span className="h-3 w-3 rounded-full bg-green-500/60" />
-            <span className="ml-3 font-mono text-[10px] tracking-wider text-text-muted">
-              SECURE_TERMINAL — /usr/bin/contact
+          <div className="flex items-center px-4 py-3 bg-black/40 border-b border-cyan-950/50">
+            <div className="flex gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-600/70" />
+              <div className="w-3 h-3 rounded-full bg-amber-500/70" />
+              <div className="w-3 h-3 rounded-full bg-emerald-500/70" />
+            </div>
+            <span className="ml-4 font-mono text-xs text-gray-500">
+              secure-terminal@robo-folio — contact.protocol
             </span>
           </div>
 
-          {/* Terminal body */}
-          <div className="p-6">
+          {/* Content */}
+          <div className="p-6 md:p-8">
             {/* Output log */}
-            <div className="mb-6 max-h-40 overflow-y-auto font-mono text-xs leading-relaxed text-neon-cyan/70">
-              {terminalOutput.map((line, i) => (
-                <div key={i} className={line.includes("✓") ? "text-neon-green" : ""}>
+            <div
+              ref={outputRef}
+              className="mb-8 max-h-56 overflow-y-auto font-mono text-sm leading-relaxed text-cyan-300/80 scrollbar-thin scrollbar-thumb-cyan-800/40"
+            >
+              {output.map((line, i) => (
+                <div
+                  key={i}
+                  className={`whitespace-pre-wrap ${
+                    line.includes("✓") || line.includes("200 OK")
+                      ? "text-emerald-400"
+                      : line.includes("ERROR")
+                      ? "text-rose-400"
+                      : ""
+                  }`}
+                >
                   {line}
                 </div>
               ))}
+
+              {/* Blinking cursor during idle */}
+              {state === "idle" && (
+                <span className="inline-block w-2 h-4 bg-cyan-400/70 animate-blink ml-1" />
+              )}
             </div>
 
-            {/* Transmitting status */}
-            {terminalState === "transmitting" && (
-              <div ref={statusLineRef} className="mb-4 opacity-0">
-                <div className="h-1 w-full overflow-hidden rounded-full bg-metal-dark">
-                  <div className="tx-bar h-full w-full rounded-full loading-bar" />
-                </div>
-              </div>
-            )}
-
             {/* Form */}
-            <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-4">
-              {/* Name */}
-              <div className="group">
-                <label className="mb-1 block font-mono text-[10px] tracking-wider text-text-muted">
-                  IDENTIFIER:UserName
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block mb-1.5 font-mono text-xs tracking-wide text-gray-500">
+                  DESIGNATION / NAME
                 </label>
-                <div className="flex items-center gap-2 rounded border border-metal-dark/50 bg-cyber-bg/40 px-3 py-2 transition-colors focus-within:border-neon-cyan/40">
-                  <span className="font-mono text-xs text-neon-cyan/50">{">"}</span>
+                <div className="flex items-center border border-cyan-900/50 rounded-lg bg-black/30 px-4 py-3 focus-within:border-cyan-600/60 transition-colors">
+                  <span className="text-cyan-500/60 mr-2 font-mono">{">"}</span>
                   <input
-                    type="text"
                     name="name"
                     required
-                    placeholder="Enter designation..."
-                    className="flex-1 bg-transparent font-mono text-sm text-text-primary placeholder:text-text-muted/40 focus:outline-none"
-                    autoComplete="name"
+                    disabled={state !== "idle"}
+                    placeholder="Enter your name / alias"
+                    className="flex-1 bg-transparent outline-none text-gray-200 placeholder-gray-600 disabled:opacity-50"
                   />
                 </div>
               </div>
 
-              {/* Email */}
-              <div className="group">
-                <label className="mb-1 block font-mono text-[10px] tracking-wider text-text-muted">
-                  COMM FREQUENCY:Email
+              <div>
+                <label className="block mb-1.5 font-mono text-xs tracking-wide text-gray-500">
+                  COMM NODE / EMAIL
                 </label>
-                <div className="flex items-center gap-2 rounded border border-metal-dark/50 bg-cyber-bg/40 px-3 py-2 transition-colors focus-within:border-neon-cyan/40">
-                  <span className="font-mono text-xs text-neon-cyan/50">{">"}</span>
+                <div className="flex items-center border border-cyan-900/50 rounded-lg bg-black/30 px-4 py-3 focus-within:border-cyan-600/60 transition-colors">
+                  <span className="text-cyan-500/60 mr-2 font-mono">{">"}</span>
                   <input
                     type="email"
                     name="email"
                     required
-                    placeholder="your@frequency.com"
-                    className="flex-1 bg-transparent font-mono text-sm text-text-primary placeholder:text-text-muted/40 focus:outline-none"
-                    autoComplete="email"
+                    disabled={state !== "idle"}
+                    placeholder="your@email.frequency"
+                    className="flex-1 bg-transparent outline-none text-gray-200 placeholder-gray-600 disabled:opacity-50"
                   />
                 </div>
               </div>
 
-              {/* Message */}
-              <div className="group">
-                <label className="mb-1 block font-mono text-[10px] tracking-wider text-text-muted">
-                  PAYLOAD:Message
+              <div>
+                <label className="block mb-1.5 font-mono text-xs tracking-wide text-gray-500">
+                  TRANSMISSION PAYLOAD
                 </label>
-                <div className="rounded border border-metal-dark/50 bg-cyber-bg/40 px-3 py-2 transition-colors focus-within:border-neon-cyan/40">
+                <div className="border border-cyan-900/50 rounded-lg bg-black/30 px-4 py-3 focus-within:border-cyan-600/60 transition-colors">
                   <textarea
                     name="message"
                     required
                     rows={4}
-                    placeholder="Compose transmission..."
-                    className="w-full resize-none bg-transparent font-mono text-sm text-text-primary placeholder:text-text-muted/40 focus:outline-none"
+                    disabled={state !== "idle"}
+                    placeholder="Describe your project / inquiry..."
+                    className="w-full bg-transparent outline-none resize-none text-gray-200 placeholder-gray-600 disabled:opacity-50"
                   />
                 </div>
               </div>
 
-              {/* Submit */}
               <button
                 type="submit"
-                disabled={terminalState === "transmitting"}
-                className="group mt-2 flex items-center justify-center gap-3 rounded border border-neon-cyan/30 bg-neon-cyan/5
-                  px-6 py-3 font-display text-xs tracking-[0.2em] text-neon-cyan
-                  transition-all duration-300 hover:border-neon-cyan/60 hover:bg-neon-cyan/10
-                  hover:shadow-[0_0_30px_rgba(0,240,255,0.15)]
-                  disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={state !== "idle"}
+                className={`
+                  mt-3 w-full sm:w-auto px-8 py-3.5 rounded-lg font-mono tracking-wide text-sm
+                  border border-cyan-600/50 bg-cyan-950/40 text-cyan-300
+                  hover:bg-cyan-900/50 hover:border-cyan-400/60 hover:shadow-[0_0_25px_rgba(34,211,238,0.2)]
+                  disabled:opacity-40 disabled:cursor-not-allowed
+                  transition-all duration-300 flex items-center justify-center gap-3
+                `}
               >
-                {terminalState === "transmitting"
-                  ? "TRANSMITTING..."
-                  : terminalState === "success"
-                    ? "✓ TRANSMITTED"
-                    : "TRANSMIT MESSAGE"}
-                {terminalState === "idle" && (
-                  <span className="transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
+                {state === "typing" && "AUTHENTICATING..."}
+                {state === "transmitting" && "TRANSMITTING..."}
+                {state === "success" && "✓ TRANSMISSION ACCEPTED"}
+                {state === "error" && "RETRY TRANSMISSION"}
+                {state === "idle" && (
+                  <>
+                    INITIATE TRANSMISSION
+                    <span className="text-lg">→</span>
+                  </>
                 )}
               </button>
             </form>
           </div>
 
-          {/* Confetti container */}
-          <div ref={confettiRef} className="pointer-events-none absolute inset-0 overflow-hidden" />
+          {/* Particles container */}
+          <div ref={particlesRef} className="absolute inset-0 pointer-events-none overflow-hidden" />
 
-          {/* Scanlines */}
-          <div className="scanlines pointer-events-none absolute inset-0 opacity-30" />
+          {/* Scanlines overlay */}
+          <div className="absolute inset-0 pointer-events-none bg-scanlines opacity-20" />
         </div>
 
-        {/* ── Footer info ── */}
-        <div className="mt-12 flex flex-col items-center gap-4 text-center">
-          <div className="flex items-center gap-6">
-            {[
-              { label: "EMAIL", value: "ahsanmalikking57@gmail.com" },
-              { label: "LOCATION", value: "Pakistan, Punjab" },
-              { label: "PHONE", value: "03276227156" },
-              { label: "WEBSITE", value: "www.ahsanmalik.xyz" },
-            ].map((info) => (
-              <div key={info.label} className="flex flex-col items-center gap-1">
-                <span className="font-mono text-[9px] tracking-wider text-text-muted">
-                  {info.label}
-                </span>
-                <span className="font-mono text-xs text-neon-cyan">
-                  {info.value}
-                </span>
-              </div>
-            ))}
+        {/* Footer contact strip */}
+        <div className="mt-12 text-center text-sm text-gray-500 font-mono">
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+            <div>
+              <span className="text-gray-600">EMAIL:</span>{" "}
+              <a href="mailto:ahsanmalikking57@gmail.com" className="text-cyan-400 hover:underline">
+                ahsanmalikking57@gmail.com
+              </a>
+            </div>
+            <div>
+              <span className="text-gray-600">PHONE:</span>{" "}
+              <a href="tel:+923276227156" className="text-cyan-400 hover:underline">
+                +92 327 6227156
+              </a>
+            </div>
+            <div>
+              <span className="text-gray-600">LOCATION:</span> Punjab, Pakistan
+            </div>
           </div>
-          <p className="font-mono text-[10px] text-text-muted">
-            © 2025 AHSAN BASHIR — MERN + NEXT.js DEVELOPER
+          <p className="mt-6 text-xs text-gray-600">
+            © 2025–2026 Ahsan Bashir — Robotics • Automation • Software Engineering
           </p>
         </div>
       </div>

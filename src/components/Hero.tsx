@@ -173,41 +173,113 @@ export default function Hero() {
       <div className="grid-bg scanlines absolute inset-0 opacity-50" />
 
       {/* ── Electromagnetic field lines (decorative) ── */}
-      <div ref={particlesRef} className="pointer-events-none absolute inset-0">
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className="particle absolute rounded-full"
-            style={{
-              width: `${4 + i * 2}px`,
-              height: `${4 + i * 2}px`,
-              top: `${20 + i * 8}%`,
-              left: `${10 + i * 10}%`,
-              background:
-                i % 3 === 0
-                  ? "#00f0ff"
-                  : i % 3 === 1
-                    ? "#ff00d4"
-                    : "#ff4d00",
-              boxShadow: `0 0 ${8 + i * 4}px currentColor`,
-              opacity: 0,
-            }}
-          />
-        ))}
-        {/* Decorative orbit rings */}
-        {[200, 300, 420].map((size, i) => (
-          <div
-            key={`ring-${i}`}
-            className="absolute rounded-full border border-neon-cyan/5"
-            style={{
-              width: size,
-              height: size,
-              right: `${-size / 4}px`,
-              top: `calc(50% - ${size / 2}px)`,
-            }}
-          />
-        ))}
-      </div>
+    {/* ── Enhanced Electromagnetic Field + Orbiting Elements ── */}
+<div 
+  ref={particlesRef} 
+  className="pointer-events-none absolute inset-0 isolate"
+  aria-hidden="true"
+>
+  {/* Subtle animated field gradient background */}
+  <div className="absolute inset-0 bg-gradient-radial from-cyan-500/5 via-purple-500/3 to-transparent opacity-60" />
+
+  {/* Animated electromagnetic field lines (SVG – lightweight & smooth) */}
+  <svg 
+    className="absolute inset-0 w-full h-full opacity-[0.12] md:opacity-[0.18]"
+    viewBox="0 0 1400 900"
+    preserveAspectRatio="xMidYMid slice"
+  >
+    <defs>
+      <linearGradient id="emf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%"   stopColor="#00f0ff" stopOpacity="0.35" />
+        <stop offset="50%"  stopColor="#a100ff" stopOpacity="0.25" />
+        <stop offset="100%" stopColor="#ff2d95" stopOpacity="0.18" />
+      </linearGradient>
+    </defs>
+
+    {/* Field lines – curved & flowing */}
+    {[...Array(7)].map((_, i) => (
+      <path
+        key={`emf-${i}`}
+        d={`M ${-200 + i*220} ${200 + i*40} 
+           Q ${300 + i*180} ${300 + i*90} ${700 + i*120} ${450 + i*60} 
+           T ${1400 + i*100} ${750 + i*30}`}
+        fill="none"
+        stroke="url(#emf-grad)"
+        strokeWidth={0.8 + i*0.3}
+        strokeLinecap="round"
+        className="field-line"
+      />
+    ))}
+  </svg>
+
+  {/* Orbiting particles – cleaner, more elegant distribution */}
+  {[...Array(10)].map((_, i) => {
+    const size = 2.5 + Math.pow(i, 0.7) * 1.8; // subtle size progression
+    const color = i % 4 === 0 ? '#00f0ff' :
+                  i % 4 === 1 ? '#ff00d4' :
+                  i % 4 === 2 ? '#ff4d00' : '#7cff00';
+
+    return (
+      <div
+        key={i}
+        className="particle absolute rounded-full will-change-transform"
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          top: `${18 + i * 7.2}%`,
+          left: `${8 + i * 8.5 + (i % 3) * 4}%`,
+          background: color,
+          boxShadow: `0 0 ${size*2.8}px ${color}`,
+          opacity: 0,
+          filter: 'blur(0.5px)',
+        }}
+      />
+    );
+  })}
+
+  {/* Premium orbit rings – subtle, breathing, responsive */}
+  {[220, 340, 480, 640].map((baseSize, i) => {
+    // Scale rings down noticeably on mobile
+    const size = baseSize * (typeof window !== 'undefined' && window.innerWidth < 768 ? 0.65 : 0.92);
+
+    return (
+      <div
+        key={`orbit-${i}`}
+        className="absolute rounded-full border border-cyan-400/6 will-change-transform"
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          right: `${-size * 0.28}px`,
+          top: `calc(50% - ${size / 2}px)`,
+          opacity: 0.08 + i * 0.04,
+          animation: `orbitBreath ${14 + i * 5}s ease-in-out infinite ${i * 2.2}s`,
+        }}
+      />
+    );
+  })}
+
+  {/* Breathing animation for rings */}
+  <style jsx global>{`
+    @keyframes orbitBreath {
+      0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.07;
+        border-color: rgba(0, 240, 255, 0.06);
+      }
+      50% {
+        transform: scale(1.04) rotate(1.5deg);
+        opacity: 0.28;
+        border-color: rgba(0, 240, 255, 0.18);
+      }
+    }
+
+    /* Very subtle field line flow – added in GSAP below */
+    .field-line {
+      stroke-dasharray: 18 36;
+    }
+  `}</style>
+  
+</div>
 
       {/* ── Content ── */}
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-12 px-6 py-20 lg:flex-row lg:gap-20">
