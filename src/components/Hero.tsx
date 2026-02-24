@@ -17,6 +17,7 @@ import { useIKFollow } from "@/hooks/useIKFollow";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { splitTextIntoSpans } from "@/utils/textSplitter";
 import { EASES } from "@/utils/eases";
+import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -258,7 +259,7 @@ export default function Hero() {
           >
             REACT.js · NEXT.js · NODE.js · EXPRESS.js · MONGODB · SUPABASE SQL
           </p>
-
+<div className="md:flex gap-4">
          <a
   href="/Ahsan-resume-black-theme.pdf"
   download
@@ -274,6 +275,25 @@ export default function Hero() {
     →
   </span>
 </a>
+<Link
+  href="/ProjectsPage"
+ 
+  rel="noopener noreferrer"
+  className="group mt-4 flex items-center gap-3 rounded border border-neon-cyan/30 bg-neon-cyan/5
+             px-6 py-3 font-display text-xs tracking-[0.2em] text-neon-cyan 
+             transition-all duration-300 hover:border-neon-cyan/60 hover:bg-neon-cyan/10
+             hover:shadow-[0_0_30px_rgba(0,240,255,0.15)]"
+>
+  View Projects
+  <span className="transition-transform duration-300 group-hover:translate-x-1">
+    →
+  </span>
+</Link>
+
+</div>
+
+
+
         </div>
 
         {/* Right: Robotic Arm */}

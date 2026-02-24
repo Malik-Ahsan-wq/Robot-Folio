@@ -12,6 +12,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { EASES } from "@/utils/eases";
+import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -115,11 +116,13 @@ export default function Navigation() {
         <div className="flex items-center justify-between rounded-lg border border-metal-dark/50 bg-cyber-bg/80 px-6 py-2 backdrop-blur-xl">
           {/* ── Logo / Brand ── */}
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded border border-neon-cyan/30">
+            <Link href="/">
+            <div className="flex h-12 w-12 items-center justify-center rounded border border-neon-cyan/30">
               <span className="text-sm font-bold text-neon-cyan font-display text-glow-cyan">
                 ◈
               </span>
             </div>
+            </Link>
             <span className="hidden font-display text-xs tracking-[0.3em] text-text-secondary sm:block">
               ROBO.FOLIO
             </span>
@@ -132,8 +135,8 @@ export default function Navigation() {
                 <button
                   role="menuitem"
                   onClick={() => scrollTo(id)}
-                  className={`nav-item group relative flex items-center gap-1.5 rounded px-3 py-1.5
-                    font-display text-[10px] tracking-[0.2em] transition-colors duration-200
+                  className={`nav-item   group relative flex items-center gap-1.5 rounded px-3 py-1.5
+                    font-display text-[10px] tracking-[0.2em]  transition-colors duration-200
                     ${
                       activeSection === id
                         ? "text-neon-cyan text-glow-cyan"
