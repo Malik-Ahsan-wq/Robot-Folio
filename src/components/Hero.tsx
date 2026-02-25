@@ -383,12 +383,10 @@ export default function Hero() {
               }}
             />
             <RoboticArm
-              ref={(refs) => {
-                armRefs.current = refs;
-                /* Grab SVG element for coordinate transforms */
-                const svgEl = armContainerRef.current?.querySelector("svg");
-                if (svgEl) svgRef.current = svgEl;
-              }}
+              globeSize={80}
+              globeColor="#00f0ff"
+              accentColor="#00f0ff"
+              starCount={8}
               width={500}
               height={500}
               className="drop-shadow-[0_0_20px_rgba(0,240,255,0.2)]"
