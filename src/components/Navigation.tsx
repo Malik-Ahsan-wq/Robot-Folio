@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -27,10 +27,14 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // ── Active section tracking ────────────────────────────────────────
+  const setActiveSectionMemo = useCallback((id: string) => {
+    setActiveSection(id);
+  }, []);
+
   useEffect(() => {
     const triggers: ScrollTrigger[] = [];
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       NAV_ITEMS.forEach(({ id }) => {
         const section = document.getElementById(id);
         if (!section) return;
@@ -39,8 +43,8 @@ export default function Navigation() {
           trigger: section,
           start: "top 65%",
           end: "bottom 65%",
-          onEnter: () => setActiveSection(id),
-          onEnterBack: () => setActiveSection(id),
+          onEnter: () => setActiveSectionMemo(id),
+          onEnterBack: () => setActiveSectionMemo(id),
         });
 
         triggers.push(trigger);
@@ -48,9 +52,10 @@ export default function Navigation() {
     }, 800);
 
     return () => {
+      clearTimeout(timeoutId);
       triggers.forEach((t) => t.kill());
     };
-  }, []);
+  }, [setActiveSectionMemo]);
 
 
 
@@ -117,10 +122,23 @@ export default function Navigation() {
     { dependencies: [isMobileMenuOpen] }
   );
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const scrollTo = useCallback((id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      element.focus({ preventScroll: true });
+    }
     setIsMobileMenuOpen(false);
-  };
+  }, []);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent, id: string) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      scrollTo(id);
+    }
+  }, [scrollTo]);
+
+  const navItems = useMemo(() => NAV_ITEMS, []);
 
   if (!isVisible) return null;
 
@@ -153,14 +171,15 @@ export default function Navigation() {
             </Link>
 
             {/* Desktop Nav */}
-            <ul className="hidden lg:flex items-center gap-2">
-              {NAV_ITEMS.map(({ id, label, icon }) => (
-                <li key={id}>
+            <ul className="hidden lg:flex items-center gap-2" role="menubar">
+              {navItems.map(({ id, label, icon }) => (
+                <li key={id} role="none">
                   <button
                     onClick={() => scrollTo(id)}
+                    onKeyDown={(e) => handleKeyDown(e, id)}
                     className={`
                       nav-item relative px-4 py-2.5 rounded-lg text-xs font-medium tracking-wide uppercase
-                      transition-all duration-300
+                      transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/50
                       ${
                         activeSection === id
                           ? "text-cyan-300 bg-cyan-950/40 border border-cyan-700/40 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
@@ -168,10 +187,13 @@ export default function Navigation() {
                       }
                     `}
                     aria-current={activeSection === id ? "page" : undefined}
+                    aria-label={`Navigate to ${label} section`}
+                    role="menuitem"
+                    tabIndex={0}
                   >
                     {label}
                     {activeSection === id && (
-                      <span className="absolute -bottom-px left-1/2 h-0.5 w-8 -translate-x-1/2 bg-gradient-to-r from-transparent via-cyan-400 to-transparent blur-sm" />
+                      <span className="absolute -bottom-px left-1/2 h-0.5 w-8 -translate-x-1/2 bg-gradient-to-r from-transparent via-cyan-400 to-transparent blur-sm" aria-hidden="true" />
                     )}
                   </button>
                 </li>
@@ -180,12 +202,13 @@ export default function Navigation() {
 
             {/* Mobile Hamburger */}
             <button
-              className="lg:hidden p-2 text-cyan-400 hover:text-cyan-200 transition-colors"
+              className="lg:hidden p-2 text-cyan-400 hover:text-cyan-200 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400/50 rounded"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-expanded={isMobileMenuOpen}
-              aria-label="Toggle navigation menu"
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-controls="mobile-menu"
             >
-              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              {isMobileMenuOpen ? <X size={28} aria-hidden="true" /> : <Menu size={28} aria-hidden="true" />}
             </button>
 
             {/* Online status pill (desktop only) */}
@@ -200,39 +223,50 @@ export default function Navigation() {
       {/* Mobile Slide-in Menu */}
       <div
         ref={mobileMenuRef}
+        id="mobile-menu"
         className={`
           fixed inset-y-0 right-0 z-[1000] w-80 bg-black/90 backdrop-blur-2xl border-l border-cyan-900/40
           lg:hidden transform transition-transform duration-500
           ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}
         `}
+        aria-hidden={!isMobileMenuOpen}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mobile-menu-title"
       >
         <div className="flex flex-col h-full p-6">
           <div className="flex items-center justify-between mb-12">
-            <div className="text-2xl font-black text-cyan-400">ROBO.FOLIO</div>
+            <div id="mobile-menu-title" className="text-2xl font-black text-cyan-400">ROBO.FOLIO</div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-cyan-400 hover:text-white"
+              className="text-cyan-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/50 rounded p-1"
+              aria-label="Close navigation menu"
             >
-              <X size={32} />
+              <X size={32} aria-hidden="true" />
             </button>
           </div>
 
-          <nav className="flex flex-col gap-2">
-            {NAV_ITEMS.map(({ id, label, icon }) => (
+          <nav className="flex flex-col gap-2" role="menu">
+            {navItems.map(({ id, label, icon }) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
+                onKeyDown={(e) => handleKeyDown(e, id)}
                 className={`
                   flex items-center gap-4 px-5 py-4 rounded-xl text-lg font-medium
-                  transition-all duration-300
+                  transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/50
                   ${
                     activeSection === id
                       ? "bg-cyan-950/60 text-cyan-300 border border-cyan-700/50"
                       : "text-gray-300 hover:bg-cyan-950/40 hover:text-cyan-200"
                   }
                 `}
+                aria-current={activeSection === id ? "page" : undefined}
+                aria-label={`Navigate to ${label} section`}
+                role="menuitem"
+                tabIndex={0}
               >
-                <span className="text-2xl opacity-80">{icon}</span>
+                <span className="text-2xl opacity-80" aria-hidden="true">{icon}</span>
                 {label}
               </button>
             ))}
@@ -251,6 +285,7 @@ export default function Navigation() {
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
         />
       )}
     </>
