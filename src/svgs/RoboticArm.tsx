@@ -1,75 +1,113 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- * ROBOTIC ARM — Multi-Joint SVG Component
+ * Glowing Globe with Orbiting Stars — Clean SVG Component
  * ═══════════════════════════════════════════════════════════════
- * A 6-DOF industrial robot arm rendered as nested SVG <g> groups.
- * Each joint's transform cascades to children (forward kinematics).
- *
- * Joint hierarchy:
- *   Base (rotate Y) → Shoulder (rotate Z) → UpperArm →
- *     Elbow (rotate Z) → Forearm → Wrist (rotate Z) →
- *       Gripper (open/close)
- *
- * Exposes refs via forwardRef so parent can animate joints with GSAP.
+ * A standalone, customizable glowing globe with orbiting particles/stars.
+ * All robotic arm elements have been removed per request.
+ * 
+ * Features:
+ * - Large glowing globe (customizable size)
+ * - Dynamic orbiting stars (count, speed, variety)
+ * - Neon glow effects and radial gradients
+ * - Mounting platform and status LEDs retained for futuristic feel
+ * - Fully typed props and refs for animation control if needed
+ * 
+ * Usage Example:
+ * <GlowingGlobe
+ *   globeSize={60}
+ *   globeColor="#a5d8ff"
+ *   accentColor="#00eaff"
+ *   starCount={6}
+ *   orbitSpeed={5}
+ * />
  */
+
 "use client";
 
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 
 export interface RoboticArmRefs {
-  base: SVGGElement | null;
-  shoulder: SVGGElement | null;
-  upperArm: SVGGElement | null;
-  elbow: SVGGElement | null;
-  forearm: SVGGElement | null;
-  wrist: SVGGElement | null;
-  gripperLeft: SVGGElement | null;
-  gripperRight: SVGGElement | null;
-  endEffector: SVGCircleElement | null;
+  globe: SVGCircleElement | null;
 }
 
-interface RoboticArmProps {
+interface GlowingGlobeProps {
+  /** Optional CSS class for the SVG */
   className?: string;
+  /** SVG width */
   width?: number;
+  /** SVG height */
   height?: number;
-  /** Base color of arm structure */
-  armColor?: string;
-  /** Accent / joint highlight color */
+  /** Base globe color (center of gradient) */
+  globeColor?: string;
+  /** Accent/glow color */
   accentColor?: string;
+  /** Globe radius (increased default) */
+  globeSize?: number;
+  /** Number of orbiting stars/particles */
+  starCount?: number;
+  /** Base orbit duration in seconds (lower = faster) */
+  orbitSpeed?: number;
+  /** Glow intensity (0–1) */
+  glowOpacity?: number;
+  /** Enable pulsing LED animations */
+  enableLedAnimations?: boolean;
 }
 
-const RoboticArm = forwardRef<RoboticArmRefs, RoboticArmProps>(
+const GlowingGlobe = forwardRef<RoboticArmRefs, GlowingGlobeProps>(
   (
     {
       className = "",
-      width = 500,
-      height = 500,
-      armColor = "#2a2f3f",
-      accentColor = "#00f0ff",
+      width = 600,
+      height = 600,
+      globeColor = "#041c1e",
+      accentColor = "#009aa5",
+      globeSize = 45,
+      starCount = 5,
+      orbitSpeed = 10,
+      glowOpacity = 0.6,
+      enableLedAnimations = true,
     },
     ref
   ) => {
-    const baseRef = useRef<SVGGElement>(null);
-    const shoulderRef = useRef<SVGGElement>(null);
-    const upperArmRef = useRef<SVGGElement>(null);
-    const elbowRef = useRef<SVGGElement>(null);
-    const forearmRef = useRef<SVGGElement>(null);
-    const wristRef = useRef<SVGGElement>(null);
-    const gripperLeftRef = useRef<SVGGElement>(null);
-    const gripperRightRef = useRef<SVGGElement>(null);
-    const endEffectorRef = useRef<SVGCircleElement>(null);
+    const globeRef = useRef<SVGCircleElement>(null);
 
     useImperativeHandle(ref, () => ({
-      base: baseRef.current,
-      shoulder: shoulderRef.current,
-      upperArm: upperArmRef.current,
-      elbow: elbowRef.current,
-      forearm: forearmRef.current,
-      wrist: wristRef.current,
-      gripperLeft: gripperLeftRef.current,
-      gripperRight: gripperRightRef.current,
-      endEffector: endEffectorRef.current,
+      globe: globeRef.current,
     }));
+
+    // Globe center position
+    const centerX = 250;
+    const centerY = 220;
+
+    // Generate dynamic orbiting stars
+    const stars = Array.from({ length: starCount }, (_, i) => {
+      const startAngle = (i / starCount) * 360;
+      const orbitRadius = globeSize + 12 + Math.random() * 18;
+      const starSize = 1.8 + Math.random() * 0.8;
+      const duration = orbitSpeed + Math.random() * 5;
+      const color = i % 2 === 0 ? "#ffffff" : accentColor;
+      const opacity = 0.75 + Math.random() * 0.25;
+
+      return (
+        <circle
+          key={i}
+          cx={centerX}
+          cy={centerY - orbitRadius}
+          r={starSize}
+          fill={color}
+          opacity={opacity}
+        >
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from={`${startAngle} ${centerX} ${centerY}`}
+            to={`${startAngle + 360} ${centerX} ${centerY}`}
+            dur={`${duration}s`}
+            repeatCount="indefinite"
+          />
+        </circle>
+      );
+    });
 
     return (
       <svg
@@ -80,300 +118,90 @@ const RoboticArm = forwardRef<RoboticArmRefs, RoboticArmProps>(
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         role="img"
-        aria-label="6-DOF industrial robotic arm illustration"
+        aria-label="Glowing globe with orbiting stars"
       >
         <defs>
-          {/* Metallic gradient for arm segments */}
-          <linearGradient id="armGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#3a4055" />
-            <stop offset="50%" stopColor={armColor} />
-            <stop offset="100%" stopColor="#1a1f2e" />
-          </linearGradient>
-
           {/* Neon glow filter */}
-          <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+          <filter id="neonGlow" x="-50%" y="-50%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
 
-          {/* Joint indicator glow */}
-          <radialGradient id="jointGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={accentColor} stopOpacity="0.8" />
+          {/* Globe radial glow */}
+          <radialGradient id="globeGlow" cx="50%" cy="50%" r="75%">
+            <stop offset="0%" stopColor={globeColor} stopOpacity={glowOpacity} />
+            <stop offset="35%" stopColor={accentColor} stopOpacity={glowOpacity * 0.85} />
+            <stop offset="100%" stopColor={accentColor} stopOpacity="0" />
+          </radialGradient>
+
+          {/* Joint/LED accent glow */}
+          <radialGradient id="accentGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor={accentColor} stopOpacity={glowOpacity} />
             <stop offset="100%" stopColor={accentColor} stopOpacity="0" />
           </radialGradient>
         </defs>
 
-        {/* ═══ MOUNTING PLATFORM ═══ */}
-        <rect
-          x="170"
-          y="420"
-          width="160"
-          height="20"
-          rx="3"
-          fill="#1a1f2e"
-          stroke="#3a4055"
-          strokeWidth="1"
-        />
-        {/* Platform bolts */}
+        {/* Mounting Platform (kept for context) */}
+        <rect x="170" y="420" width="160" height="20" rx="3" fill="#1a1f2e" stroke="#3a4055" strokeWidth="1" />
         <circle cx="185" cy="430" r="3" fill="#4a5568" />
         <circle cx="315" cy="430" r="3" fill="#4a5568" />
         <circle cx="250" cy="430" r="3" fill="#4a5568" />
 
-        {/* ═══ BASE — rotates around center bottom ═══ */}
-        <g ref={baseRef} style={{ transformOrigin: "250px 410px" }}>
-          {/* Base cylinder */}
-          <rect
-            x="215"
-            y="380"
-            width="70"
-            height="40"
-            rx="8"
-            fill="url(#armGrad)"
-            stroke="#4a5568"
-            strokeWidth="1.5"
-          />
-          {/* Base joint indicator ring */}
-          <ellipse
-            cx="250"
-            cy="400"
-            rx="38"
-            ry="6"
-            fill="none"
-            stroke={accentColor}
-            strokeWidth="1"
-            opacity="0.5"
-          />
-          {/* Base rotation indicator */}
+        {/* Main Glowing Globe */}
+        <g>
           <circle
-            cx="250"
-            cy="400"
-            r="8"
-            fill="url(#jointGlow)"
+            ref={globeRef}
+            cx={centerX}
+            cy={centerY}
+            r={globeSize}
+            fill="url(#globeGlow)"
             filter="url(#neonGlow)"
+            stroke={accentColor}
+            strokeWidth="2"
+            opacity={glowOpacity}
           />
 
-          {/* ═══ SHOULDER — rotates at top of base ═══ */}
-          <g ref={shoulderRef} style={{ transformOrigin: "250px 375px" }}>
-            {/* Shoulder joint housing */}
-            <circle
-              cx="250"
-              cy="375"
-              r="14"
-              fill="#1a1f2e"
-              stroke="#4a5568"
-              strokeWidth="2"
-            />
-            <circle
-              cx="250"
-              cy="375"
-              r="6"
-              fill={accentColor}
-              opacity="0.7"
-              filter="url(#neonGlow)"
-            />
+          {/* Subtle continent-like shading */}
+          <ellipse
+            cx={centerX + globeSize * 0.3}
+            cy={centerY - globeSize * 0.15}
+            rx={globeSize * 0.35}
+            ry={globeSize * 0.25}
+            fill="#ffffff"
+            opacity="0.14"
+          />
+          <ellipse
+            cx={centerX - globeSize * 0.45}
+            cy={centerY + globeSize * 0.3}
+            rx={globeSize * 0.3}
+            ry={globeSize * 0.2}
+            fill="#ffffff"
+            opacity="0.11"
+          />
 
-            {/* ═══ UPPER ARM ═══ */}
-            <g ref={upperArmRef}>
-              {/* Main upper arm segment */}
-              <rect
-                x="240"
-                y="255"
-                width="20"
-                height="120"
-                rx="4"
-                fill="url(#armGrad)"
-                stroke="#4a5568"
-                strokeWidth="1.5"
-              />
-              {/* Hydraulic piston detail (left) */}
-              <rect
-                x="233"
-                y="280"
-                width="5"
-                height="70"
-                rx="2"
-                fill="#1a1f2e"
-                stroke="#3a4055"
-                strokeWidth="0.5"
-              />
-              {/* Hydraulic piston detail (right) */}
-              <rect
-                x="262"
-                y="280"
-                width="5"
-                height="70"
-                rx="2"
-                fill="#1a1f2e"
-                stroke="#3a4055"
-                strokeWidth="0.5"
-              />
-              {/* Cable routing groove */}
-              <line
-                x1="250"
-                y1="260"
-                x2="250"
-                y2="365"
-                stroke={accentColor}
-                strokeWidth="0.5"
-                opacity="0.3"
-              />
-
-              {/* ═══ ELBOW — rotates at top of upper arm ═══ */}
-              <g ref={elbowRef} style={{ transformOrigin: "250px 250px" }}>
-                {/* Elbow joint housing */}
-                <circle
-                  cx="250"
-                  cy="250"
-                  r="12"
-                  fill="#1a1f2e"
-                  stroke="#4a5568"
-                  strokeWidth="2"
-                />
-                <circle
-                  cx="250"
-                  cy="250"
-                  r="5"
-                  fill={accentColor}
-                  opacity="0.7"
-                  filter="url(#neonGlow)"
-                />
-
-                {/* ═══ FOREARM ═══ */}
-                <g ref={forearmRef}>
-                  {/* Main forearm segment — thinner */}
-                  <rect
-                    x="243"
-                    y="165"
-                    width="14"
-                    height="85"
-                    rx="3"
-                    fill="url(#armGrad)"
-                    stroke="#4a5568"
-                    strokeWidth="1"
-                  />
-                  {/* Forearm detail lines */}
-                  <line
-                    x1="246"
-                    y1="175"
-                    x2="246"
-                    y2="240"
-                    stroke="#4a5568"
-                    strokeWidth="0.5"
-                  />
-                  <line
-                    x1="254"
-                    y1="175"
-                    x2="254"
-                    y2="240"
-                    stroke="#4a5568"
-                    strokeWidth="0.5"
-                  />
-
-                  {/* ═══ WRIST — rotates at top of forearm ═══ */}
-                  <g ref={wristRef} style={{ transformOrigin: "250px 160px" }}>
-                    {/* Wrist joint */}
-                    <circle
-                      cx="250"
-                      cy="160"
-                      r="9"
-                      fill="#1a1f2e"
-                      stroke="#4a5568"
-                      strokeWidth="1.5"
-                    />
-                    <circle
-                      cx="250"
-                      cy="160"
-                      r="4"
-                      fill={accentColor}
-                      opacity="0.6"
-                      filter="url(#neonGlow)"
-                    />
-
-                    {/* ═══ GRIPPER ASSEMBLY ═══ */}
-                    {/* Gripper mount */}
-                    <rect
-                      x="244"
-                      y="140"
-                      width="12"
-                      height="20"
-                      rx="2"
-                      fill="#2a2f3f"
-                      stroke="#4a5568"
-                      strokeWidth="1"
-                    />
-
-                    {/* Left gripper finger */}
-                    <g
-                      ref={gripperLeftRef}
-                      style={{ transformOrigin: "244px 138px" }}
-                    >
-                      <path
-                        d="M244 138 L230 118 L234 115 L246 135 Z"
-                        fill="url(#armGrad)"
-                        stroke="#4a5568"
-                        strokeWidth="1"
-                      />
-                      {/* Finger tip */}
-                      <circle cx="232" cy="116" r="3" fill={accentColor} opacity="0.4" />
-                    </g>
-
-                    {/* Right gripper finger */}
-                    <g
-                      ref={gripperRightRef}
-                      style={{ transformOrigin: "256px 138px" }}
-                    >
-                      <path
-                        d="M256 138 L270 118 L266 115 L254 135 Z"
-                        fill="url(#armGrad)"
-                        stroke="#4a5568"
-                        strokeWidth="1"
-                      />
-                      {/* Finger tip */}
-                      <circle cx="268" cy="116" r="3" fill={accentColor} opacity="0.4" />
-                    </g>
-
-                    {/* ═══ END EFFECTOR — target point for IK ═══ */}
-                    <circle
-                      ref={endEffectorRef}
-                      cx="250"
-                      cy="115"
-                      r="3"
-                      fill={accentColor}
-                      filter="url(#neonGlow)"
-                      opacity="0.9"
-                    />
-                  </g>
-                </g>
-              </g>
-            </g>
-          </g>
+          {/* Orbiting stars */}
+          {stars}
         </g>
 
-        {/* ═══ STATUS INDICATOR LEDs ═══ */}
-        <circle cx="200" cy="428" r="2" fill="#00ff88" opacity="0.8">
-          <animate
-            attributeName="opacity"
-            values="0.8;0.3;0.8"
-            dur="2s"
-            repeatCount="indefinite"
-          />
+        {/* Status LEDs */}
+        <circle cx="200" cy="428" r="2.5" fill="#00ff88" opacity="0.85">
+          {enableLedAnimations && (
+            <animate attributeName="opacity" values="0.85;0.35;0.85" dur="2.2s" repeatCount="indefinite" />
+          )}
         </circle>
-        <circle cx="210" cy="428" r="2" fill={accentColor} opacity="0.6">
-          <animate
-            attributeName="opacity"
-            values="0.6;0.2;0.6"
-            dur="1.5s"
-            repeatCount="indefinite"
-          />
+        <circle cx="210" cy="428" r="2.5" fill={accentColor} opacity="0.7">
+          {enableLedAnimations && (
+            <animate attributeName="opacity" values="0.7;0.25;0.7" dur="1.8s" repeatCount="indefinite" />
+          )}
         </circle>
       </svg>
     );
   }
 );
 
-RoboticArm.displayName = "RoboticArm";
+GlowingGlobe.displayName = "RoboticArm";
 
-export default RoboticArm;
+export default GlowingGlobe;
