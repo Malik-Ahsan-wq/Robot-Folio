@@ -98,29 +98,7 @@ export default function Navigation() {
     return () => clearTimeout(timer);
   }, []);
 
-  // ── Mobile menu animation ──────────────────────────────────────────
-  useGSAP(
-    () => {
-      if (!mobileMenuRef.current) return;
 
-      gsap.set(mobileMenuRef.current, { x: "100%" });
-
-      if (isMobileMenuOpen) {
-        gsap.to(mobileMenuRef.current, {
-          x: 0,
-          duration: 0.5,
-          ease: "power3.out",
-        });
-      } else {
-        gsap.to(mobileMenuRef.current, {
-          x: "100%",
-          duration: 0.4,
-          ease: "power2.in",
-        });
-      }
-    },
-    { dependencies: [isMobileMenuOpen] }
-  );
 
   const scrollTo = useCallback((id: string) => {
     const element = document.getElementById(id);
@@ -220,20 +198,17 @@ export default function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile Slide-in Menu */}
-      <div
-        ref={mobileMenuRef}
-        id="mobile-menu"
-        className={`
-          fixed inset-y-0 right-0 z-[1000] w-80 bg-black/90 backdrop-blur-2xl border-l border-cyan-900/40
-          lg:hidden transform transition-transform duration-500
-          ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}
-        `}
-        aria-hidden={!isMobileMenuOpen}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="mobile-menu-title"
-      >
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div
+          ref={mobileMenuRef}
+          id="mobile-menu"
+          className="fixed inset-y-0 right-0 z-[1000] w-80 bg-black/90 backdrop-blur-2xl border-l border-cyan-900/40 lg:hidden"
+          aria-hidden={false}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="mobile-menu-title"
+        >
         <div className="flex flex-col h-full p-6">
           <div className="flex items-center justify-between mb-12">
             <div id="mobile-menu-title" className="text-2xl font-black text-cyan-400">ROBO.FOLIO</div>
@@ -278,7 +253,8 @@ export default function Navigation() {
             </p>
           </div>
         </div>
-      </div>
+        </div>
+      )}
 
       {/* Backdrop for mobile menu */}
       {isMobileMenuOpen && (
